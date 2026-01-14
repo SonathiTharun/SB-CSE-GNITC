@@ -1,0 +1,1184 @@
+{
+  "students": [
+    {
+      "sno": 1,
+      "id": "22WJ8A05BZ",
+      "name": "Buddineni santhosh",
+      "company": "KeshavSoft",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "Keshav soft.png"
+    },
+    {
+      "sno": 2,
+      "id": "22WJ8A05CT",
+      "name": "KATAKAM ADITHYA",
+      "company": "KeshavSoft",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "Keshav soft.png"
+    },
+    {
+      "sno": 3,
+      "id": "22WJ8A05P5",
+      "name": "Saniya",
+      "company": "KeshavSoft",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "Keshav soft.png"
+    },
+    {
+      "sno": 4,
+      "id": "22WJ8A05PD",
+      "name": "Venkatesh yadav",
+      "company": "KeshavSoft",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "Keshav soft.png"
+    },
+    {
+      "sno": 5,
+      "id": "22WJ8A05Z3",
+      "name": "Gangapuram Nandini",
+      "company": "KeshavSoft",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "Keshav soft.png"
+    },
+    {
+      "sno": 6,
+      "id": "22WJ8A0546",
+      "name": "Polishetty Vennela",
+      "company": "CDK Global",
+      "salary": 6.5,
+      "photo": "",
+      "logo": ""
+    },
+    {
+      "sno": 7,
+      "id": "22WJ8A05Z0",
+      "name": "DASARI VARASIDDU",
+      "company": "Nocac Ventures Pvt. Ltd.",
+      "salary": 4.8,
+      "photo": "",
+      "logo": "NOCAC.jfif"
+    },
+    {
+      "sno": 8,
+      "id": "22WJ8A0502",
+      "name": "Aili Siddartha",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 9,
+      "id": "22WJ8A0534",
+      "name": "K.Mani Veera Venkata Reddy",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 10,
+      "id": "22WJ8A0556",
+      "name": "Shaik Naveed",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 11,
+      "id": "22WJ8A05CC",
+      "name": "Durnala sravan Kumar",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 12,
+      "id": "22WJ8A05MA",
+      "name": "SHEELAM RAHUL",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 13,
+      "id": "22WJ8A05NA",
+      "name": "E.Ramya",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 14,
+      "id": "22WJ8A05NP",
+      "name": "K.Harit",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 15,
+      "id": "22WJ8A05NR",
+      "name": "K. Nithya Prashamsa",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 16,
+      "id": "22WJ8A05TN",
+      "name": "V Vineeth Reddy",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 17,
+      "id": "22WJ8A05AP",
+      "name": "NARRA BHARGAVA SAI",
+      "company": "Tutorac",
+      "salary": 4.0,
+      "photo": "",
+      "logo": "Tutorac.jfif"
+    },
+    {
+      "sno": 18,
+      "id": "22WJ8A05DD",
+      "name": "MOTHUKURI VEERAMANIDRA CHARY",
+      "company": "Tutorac",
+      "salary": 4.0,
+      "photo": "",
+      "logo": "Tutorac.jfif"
+    },
+    {
+      "sno": 19,
+      "id": "22WJ8A05FM",
+      "name": "MOHAMMED MAHMOOD",
+      "company": "Tutorac",
+      "salary": 4.0,
+      "photo": "22WJ8A05FM- Mahmood.jpeg",
+      "logo": "Tutorac.jfif"
+    },
+    {
+      "sno": 20,
+      "id": "22WJ8A05NL",
+      "name": "K PAYAL",
+      "company": "Tutorac",
+      "salary": 4.0,
+      "photo": "",
+      "logo": "Tutorac.jfif"
+    },
+    {
+      "sno": 21,
+      "id": "22WJ8A0571",
+      "name": "BADOLA ARYAN",
+      "company": "SprintM Technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "SprintM Tech.png"
+    },
+    {
+      "sno": 22,
+      "id": "22WJ8A05DW",
+      "name": "B V THARUN TEJA REDDY",
+      "company": "SprintM Technologies",
+      "salary": 6.0,
+      "photo": "22WJ8A05DW -B V THARUN TEJA REDDY .JPG",
+      "logo": "SprintM Tech.png"
+    },
+    {
+      "sno": 23,
+      "id": "22WJ8A05PM",
+      "name": "Pingili.Lakshmi Deekshitha Reddy",
+      "company": "SprintM Technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "SprintM Tech.png"
+    },
+    {
+      "sno": 24,
+      "id": "22WJ8A0560",
+      "name": "Harshita T",
+      "company": "TURTIL",
+      "salary": 6.0,
+      "photo": "22WJ8A0560- Harshita Tirumal.jpg",
+      "logo": "TURTIL.jfif"
+    },
+    {
+      "sno": 25,
+      "id": "22WJ8A05JG",
+      "name": "tata sri vishal sai",
+      "company": "SprintM Technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "SprintM Tech.png"
+    },
+    {
+      "sno": 26,
+      "id": "22WJ8A05K2",
+      "name": "brungi sahithi",
+      "company": "SprintM Technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "SprintM Tech.png"
+    },
+    {
+      "sno": 27,
+      "id": "22WJ8A05NE",
+      "name": "GOSHIKA VAISHNAVI",
+      "company": "The Leading Solutions",
+      "salary": 2.4,
+      "photo": "",
+      "logo": "Leading Solutions.png"
+    },
+    {
+      "sno": 28,
+      "id": "22WJ8A0520",
+      "name": "G RAMAKRISHNA",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 29,
+      "id": "22WJ8A0526",
+      "name": "G manasa",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 30,
+      "id": "22WJ8A0575",
+      "name": "CHAPPIDI SATHWIKA",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 31,
+      "id": "22WJ8A0597",
+      "name": "Subash Kommula",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 32,
+      "id": "22WJ8A05AD",
+      "name": "Rohan lucky Mamidala",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 33,
+      "id": "22WJ8A05ER",
+      "name": "JAKKULLA BRIJANAND",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 34,
+      "id": "22WJ8A05F8",
+      "name": "K.Anvitha",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 35,
+      "id": "22WJ8A05FX",
+      "name": "Rahul Sharma",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 36,
+      "id": "22WJ8A05GB",
+      "name": "Sesham Uday Kiran",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 37,
+      "id": "22WJ8A05JE",
+      "name": "Naren shakhamuri",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 38,
+      "id": "22WJ8A05K1",
+      "name": "B varshini",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 39,
+      "id": "22WJ8A05K9",
+      "name": "Godugu Vinay",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 40,
+      "id": "22WJ8A05LD",
+      "name": "Mamindla Jeevan",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 41,
+      "id": "22WJ8A05M0",
+      "name": "karanam shreyank rao",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 42,
+      "id": "22WJ8A05M2",
+      "name": "Kesam Pushkal",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 43,
+      "id": "22WJ8A05M7",
+      "name": "M.Amulya",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 44,
+      "id": "22WJ8A05MC",
+      "name": "T.kotesh",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 45,
+      "id": "22WJ8A05N6",
+      "name": "Pachipala Vinay yadav",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 46,
+      "id": "22WJ8A05N7",
+      "name": "Vaishnavi",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 47,
+      "id": "22WJ8A05NE",
+      "name": "Vaishnavi",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 48,
+      "id": "22WJ8A05NM",
+      "name": "Karra Sreeja Reddy",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 49,
+      "id": "22WJ8A05NN",
+      "name": "Amulya Kodakandla",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 50,
+      "id": "22WJ8A05P3",
+      "name": "S Chiranjeevi Sai pranav",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "22WJ8A05P3- S CHIRANJEEVI SAI PRANAV.jpg",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 51,
+      "id": "22WJ8A05Q0",
+      "name": "Shivarathri Uday Kumar",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 52,
+      "id": "22WJ8A05Q8",
+      "name": "A.Sai Siddharth",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 53,
+      "id": "22WJ8A05TK",
+      "name": "Sampathi Archana Reddy",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 54,
+      "id": "22WJ8A05U3",
+      "name": "I.Snehitha",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 55,
+      "id": "22WJ8A05UY",
+      "name": "K.Anirudh Sharma",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 56,
+      "id": "22WJ8A05V0",
+      "name": "Madderla Mani Balesh",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 57,
+      "id": "22WJ8A05W3",
+      "name": "Sonathi Tharun Kumar",
+      "company": "MSsquare technologies",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "MS square.jfif"
+    },
+    {
+      "sno": 58,
+      "id": "22WJ8A05G5",
+      "name": "NAGAM RISHIKA",
+      "company": "Tutorac",
+      "salary": 4.0,
+      "photo": "",
+      "logo": "Tutorac.jfif"
+    },
+    {
+      "sno": 59,
+      "id": "22WJ8A0502",
+      "name": "Aili Siddartha",
+      "company": "Dexterity Edtech Pvt Ltd.",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "dexterity.jfif"
+    },
+    {
+      "sno": 60,
+      "id": "22WJ8A0507",
+      "name": "B.Shivani",
+      "company": "Dexterity Edtech Pvt Ltd.",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "dexterity.jfif"
+    },
+    {
+      "sno": 61,
+      "id": "22WJ8A0510",
+      "name": "B.Rakesh",
+      "company": "Dexterity Edtech Pvt Ltd.",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "dexterity.jfif"
+    },
+    {
+      "sno": 62,
+      "id": "22WJ8A0511",
+      "name": "B Yeshwanth",
+      "company": "Dexterity Edtech Pvt Ltd.",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "dexterity.jfif"
+    },
+    {
+      "sno": 63,
+      "id": "22WJ8A0520",
+      "name": "G RAMAKRISHNA",
+      "company": "Dexterity Edtech Pvt Ltd.",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "dexterity.jfif"
+    },
+    {
+      "sno": 64,
+      "id": "22WJ8A0539",
+      "name": "Mohammed Abdul Azeem",
+      "company": "Dexterity Edtech Pvt Ltd.",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "dexterity.jfif"
+    },
+    {
+      "sno": 65,
+      "id": "22WJ8A0542",
+      "name": "Paramati Anusha",
+      "company": "Dexterity Edtech Pvt Ltd.",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "dexterity.jfif"
+    },
+    {
+      "sno": 66,
+      "id": "22WJ8A0544",
+      "name": "P Jayakumar",
+      "company": "Dexterity Edtech Pvt Ltd.",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "dexterity.jfif"
+    },
+    {
+      "sno": 67,
+      "id": "22WJ8A0556",
+      "name": "Shaik Naveed",
+      "company": "Dexterity Edtech Pvt Ltd.",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "dexterity.jfif"
+    },
+    {
+      "sno": 68,
+      "id": "22WJ8A05C0",
+      "name": "s.laxmi saketh",
+      "company": "Dexterity Edtech Pvt Ltd.",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "dexterity.jfif"
+    },
+    {
+      "sno": 69,
+      "id": "22WJ8A05E3",
+      "name": "CHIGURUPATI SAI VENKATA SRIJA",
+      "company": "Dexterity Edtech Pvt Ltd.",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "dexterity.jfif"
+    },
+    {
+      "sno": 70,
+      "id": "22WJ8A05HA",
+      "name": "G.Hasini",
+      "company": "Dexterity Edtech Pvt Ltd.",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "dexterity.jfif"
+    },
+    {
+      "sno": 71,
+      "id": "22WJ8A05J4",
+      "name": "Vemisetty Sahithi",
+      "company": "Dexterity Edtech Pvt Ltd.",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "dexterity.jfif"
+    },
+    {
+      "sno": 72,
+      "id": "22WJ8A05JW",
+      "name": "Arige Pavan Kalyan",
+      "company": "Dexterity Edtech Pvt Ltd.",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "dexterity.jfif"
+    },
+    {
+      "sno": 73,
+      "id": "22WJ8A05PV",
+      "name": "S ESMITHA",
+      "company": "Dexterity Edtech Pvt Ltd.",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "dexterity.jfif"
+    },
+    {
+      "sno": 74,
+      "id": "22WJ8A05Q7",
+      "name": "Yagnik Reddy",
+      "company": "Dexterity Edtech Pvt Ltd.",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "dexterity.jfif"
+    },
+    {
+      "sno": 75,
+      "id": "22WJ8A05QT",
+      "name": "C.MYTHILI",
+      "company": "Dexterity Edtech Pvt Ltd.",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "dexterity.jfif"
+    },
+    {
+      "sno": 76,
+      "id": "22WJ8A05RC",
+      "name": "J.Gopika",
+      "company": "Dexterity Edtech Pvt Ltd.",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "dexterity.jfif"
+    },
+    {
+      "sno": 77,
+      "id": "22WJ8A05TM",
+      "name": "S.Shiva Shankar Reddy",
+      "company": "Dexterity Edtech Pvt Ltd.",
+      "salary": 6.0,
+      "photo": "22WJ8A05TM- Shiva Shankar.jpeg",
+      "logo": "dexterity.jfif"
+    },
+    {
+      "sno": 78,
+      "id": "22WJ8A05UH",
+      "name": "E Bhavya Sree",
+      "company": "Dexterity Edtech Pvt Ltd.",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "dexterity.jfif"
+    },
+    {
+      "sno": 79,
+      "id": "22WJ8A05UJ",
+      "name": "G.Nithin",
+      "company": "Dexterity Edtech Pvt Ltd.",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "dexterity.jfif"
+    },
+    {
+      "sno": 80,
+      "id": "22WJ8A05L2",
+      "name": "Gudidha Sairam",
+      "company": "Cognizant NPN Salesforce",
+      "salary": 4.0,
+      "photo": "",
+      "logo": "cognizant.jfif"
+    },
+    {
+      "sno": 81,
+      "id": "22WJ8A05N0",
+      "name": "Sree Harsha Mengji",
+      "company": "Cognizant NPN Salesforce",
+      "salary": 4.0,
+      "photo": "",
+      "logo": "cognizant.jfif"
+    },
+    {
+      "sno": 82,
+      "id": "22WJ8A05W3",
+      "name": "Sonathi Tharun Kumar",
+      "company": "Cognizant NPN Salesforce",
+      "salary": 4.0,
+      "photo": "",
+      "logo": "cognizant.jfif"
+    },
+    {
+      "sno": 83,
+      "id": "22WJ8A05RD",
+      "name": "JAPATHI ANUDEEP",
+      "company": "Vijay Software Solutions",
+      "salary": 5.0,
+      "photo": "22WJ8A05RD- Anudeep Japathi.jpg",
+      "logo": "Vijay Software.jpeg"
+    },
+    {
+      "sno": 84,
+      "id": "22WJ8A0560",
+      "name": "THIRUMAL HARSHITHA",
+      "company": "RealPage India Private Limited",
+      "salary": 10.0,
+      "photo": "22WJ8A0560- Harshita Tirumal.jpg",
+      "logo": "RealPage India.jpg"
+    },
+    {
+      "sno": 85,
+      "id": "22WJ8A05E4",
+      "name": "CHINTADA KEERTHI",
+      "company": "RealPage India Private Limited",
+      "salary": 10.0,
+      "photo": "22WJ8A05E4 -CHINTADA KEERTHI.jpg",
+      "logo": "RealPage India.jpg"
+    },
+    {
+      "sno": 86,
+      "id": "22WJ8A05HM",
+      "name": "KOLANAKUDURU VENKATA SAI CHANDRA SRIVALLI",
+      "company": "RealPage India Private Limited",
+      "salary": 10.0,
+      "photo": "22WJ8A05HM-K V S C Srivalli .jpeg",
+      "logo": "RealPage India.jpg"
+    },
+    {
+      "sno": 87,
+      "id": "22WJ8A05MW",
+      "name": "CHITTEDI SNEHITHA",
+      "company": "RealPage India Private Limited",
+      "salary": 10.0,
+      "photo": "22WJ8A05MW -Snehitha Reddy Chittedi.jpeg",
+      "logo": "RealPage India.jpg"
+    },
+    {
+      "sno": 88,
+      "id": "22WJ8A05QC",
+      "name": "VANJAKU RAJ KUMAR",
+      "company": "RealPage India Private Limited",
+      "salary": 10.0,
+      "photo": "22WJ8A05QC- VANJAKU RAJ KUMAR.jpg",
+      "logo": "RealPage India.jpg"
+    },
+    {
+      "sno": 89,
+      "id": "22WJ8A05CA",
+      "name": "CHANDA DHANUSH",
+      "company": "Grad Guru",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "grad guru.png"
+    },
+    {
+      "sno": 90,
+      "id": "22WJ8A05CF",
+      "name": "ERAVELLY ASHWITHA",
+      "company": "Grad Guru",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "grad guru.png"
+    },
+    {
+      "sno": 91,
+      "id": "22WJ8A05CG",
+      "name": "ERRABOTHU VIKAS REDDY",
+      "company": "Grad Guru",
+      "salary": 6.0,
+      "photo": "22WJ8A05CG-Errabothu Vikas Reddy (2).jpg",
+      "logo": "grad guru.png"
+    },
+    {
+      "sno": 92,
+      "id": "22WJ8A05DV",
+      "name": "ANUGULA KEERTHANA",
+      "company": "Grad Guru",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "grad guru.png"
+    },
+    {
+      "sno": 93,
+      "id": "22WJ8A05KP",
+      "name": "GOURU DATHA SAI",
+      "company": "Grad Guru",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "grad guru.png"
+    },
+    {
+      "sno": 94,
+      "id": "22WJ8A05KT",
+      "name": "GURRAPU MANISH BABU",
+      "company": "Grad Guru",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "grad guru.png"
+    },
+    {
+      "sno": 95,
+      "id": "22WJ8A05LE",
+      "name": "MARUPAKA NAGALAKSHMI",
+      "company": "Grad Guru",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "grad guru.png"
+    },
+    {
+      "sno": 96,
+      "id": "22WJ8A05PD",
+      "name": "NAKKANABOINA VENKATESH",
+      "company": "Grad Guru",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "grad guru.png"
+    },
+    {
+      "sno": 97,
+      "id": "22WJ8A05PU",
+      "name": "RAMDASU SIDDARTHA PATEL",
+      "company": "Grad Guru",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "grad guru.png"
+    },
+    {
+      "sno": 98,
+      "id": "22WJ8A05PW",
+      "name": "S UDAYKIRAN YADAV",
+      "company": "Grad Guru",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "grad guru.png"
+    },
+    {
+      "sno": 99,
+      "id": "22WJ8A05QA",
+      "name": "TALASANI PUJITHA",
+      "company": "Grad Guru",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "grad guru.png"
+    },
+    {
+      "sno": 100,
+      "id": "22WJ8A05QE",
+      "name": "VINODA RAO RASHMINTEZ",
+      "company": "Grad Guru",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "grad guru.png"
+    },
+    {
+      "sno": 101,
+      "id": "22WJ8A05TP",
+      "name": "VANKAYALAPATI SANDEEP",
+      "company": "Grad Guru",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "grad guru.png"
+    },
+    {
+      "sno": 102,
+      "id": "22WJ8A05TX",
+      "name": "A SRAVAN KUMAR",
+      "company": "Grad Guru",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "grad guru.png"
+    },
+    {
+      "sno": 103,
+      "id": "22WJ8A05VM",
+      "name": "RAVU KOMALI",
+      "company": "Grad Guru",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "grad guru.png"
+    },
+    {
+      "sno": 104,
+      "id": "22WJ8A05VX",
+      "name": "THALLURI KEERTHANA",
+      "company": "Grad Guru",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "grad guru.png"
+    },
+    {
+      "sno": 105,
+      "id": "22WJ8A05Y2",
+      "name": "Boyapally Poojitha",
+      "company": "Mu Sigma",
+      "salary": 40.0,
+      "photo": "22WJ8A05Y2-B.Poojitha .jpeg",
+      "logo": "Mu-Sigma.jpg"
+    },
+    {
+      "sno": 106,
+      "id": "22WJ8A05DY",
+      "name": "BADDAM DIMPUL",
+      "company": "Modak Analytics LLP",
+      "salary": 4.0,
+      "photo": "22WJ8A05DY- BaddamDimpul Reddy.png",
+      "logo": "modak analtics.png"
+    },
+    {
+      "sno": 107,
+      "id": "22WJ8A05NF",
+      "name": "ILENI ANUDEEP REDDY",
+      "company": "Pandora R&D Labs Pvt Ltd.",
+      "salary": 3.6,
+      "photo": "22WJ8A05NF- Ileni Anudeep Reddy.jpeg",
+      "logo": "Pandora R&D Labs.jfif"
+    },
+    {
+      "sno": 108,
+      "id": "22WJ8A0513",
+      "name": "CHEPURI ANIL SAI KRISHNA",
+      "company": "ET Creatives",
+      "salary": 4.0,
+      "photo": "22WJ8A0513- Anil sai krishna Chepuri.jpg",
+      "logo": "et creatives.png"
+    },
+    {
+      "sno": 109,
+      "id": "22WJ8A05DY",
+      "name": "BADDAM DIMPUL",
+      "company": "LTIMindtree",
+      "salary": 4.05,
+      "photo": "22WJ8A05DY- BaddamDimpul Reddy.png",
+      "logo": "LTI mindtree.png"
+    },
+    {
+      "sno": 110,
+      "id": "22WJ8A05EK",
+      "name": "GOLCONDA SHASHANK REDDY",
+      "company": "LTIMindtree",
+      "salary": 4.05,
+      "photo": "22WJ8A05EK - Shashank Reddy.jpg",
+      "logo": "LTI mindtree.png"
+    },
+    {
+      "sno": 111,
+      "id": "22WJ8A05FG",
+      "name": "LANKIREDDY SNEHITHA REDDY",
+      "company": "LTIMindtree",
+      "salary": 4.05,
+      "photo": "",
+      "logo": "LTI mindtree.png"
+    },
+    {
+      "sno": 112,
+      "id": "22WJ8A05FY",
+      "name": "RAJYALAXMI KARNATI",
+      "company": "LTIMindtree",
+      "salary": 4.05,
+      "photo": "22WJ8A05FY- Rajyalaxmi Karnati.jpg",
+      "logo": "LTI mindtree.png"
+    },
+    {
+      "sno": 113,
+      "id": "22WJ8A05J8",
+      "name": "ALLAKA BHANU CHANDRA PRASAD",
+      "company": "LTIMindtree",
+      "salary": 4.05,
+      "photo": "22WJ8A05J8- Allaka Bhanu.jpg",
+      "logo": "LTI mindtree.png"
+    },
+    {
+      "sno": 114,
+      "id": "22WJ8A05J9",
+      "name": "ANKITH KATARIA",
+      "company": "LTIMindtree",
+      "salary": 4.05,
+      "photo": "22WJ8A05J9- ANKITH KATARIA.jpeg",
+      "logo": "LTI mindtree.png"
+    },
+    {
+      "sno": 115,
+      "id": "22WJ8A05MN",
+      "name": "AILURI MOHITH REDDY",
+      "company": "LTIMindtree",
+      "salary": 4.05,
+      "photo": "22WJ8A05MN - mohith reddy.jpg",
+      "logo": "LTI mindtree.png"
+    },
+    {
+      "sno": 116,
+      "id": "22WJ8A05NT",
+      "name": "KORUKANTI VAESHNAVI",
+      "company": "LTIMindtree",
+      "salary": 4.05,
+      "photo": "22WJ8A05NT - Vaeshnavi Korukanti.jpg",
+      "logo": "LTI mindtree.png"
+    },
+    {
+      "sno": 117,
+      "id": "22WJ8A05P3",
+      "name": "S CHIRANJEEVI SAI PRANAV",
+      "company": "LTIMindtree",
+      "salary": 4.05,
+      "photo": "22WJ8A05P3- S CHIRANJEEVI SAI PRANAV.jpg",
+      "logo": "LTI mindtree.png"
+    },
+    {
+      "sno": 118,
+      "id": "22WJ8A05RB",
+      "name": "GUTHA HARSHITH KUMAR",
+      "company": "LTIMindtree",
+      "salary": 4.05,
+      "photo": "22WJ8A05RB- Harshith Kumar.jpg",
+      "logo": "LTI mindtree.png"
+    },
+    {
+      "sno": 119,
+      "id": "22WJ8A05RL",
+      "name": "KELUTH RONITH AKSHAY",
+      "company": "LTIMindtree",
+      "salary": 4.05,
+      "photo": "22WJ8A05RL- Ronith akshay.jpg",
+      "logo": "LTI mindtree.png"
+    },
+    {
+      "sno": 120,
+      "id": "22WJ8A05VU",
+      "name": "SURUGURI DEVIKA",
+      "company": "LTIMindtree",
+      "salary": 4.05,
+      "photo": "22WJ8A05VU- Suruguri Devika Reddy.jpg",
+      "logo": "LTI mindtree.png"
+    },
+    {
+      "sno": 121,
+      "id": "22WJ8A05VY",
+      "name": "TUNGANA PRANNAV",
+      "company": "LTIMindtree",
+      "salary": 4.05,
+      "photo": "",
+      "logo": "LTI mindtree.png"
+    },
+    {
+      "sno": 122,
+      "id": "22WJ8A05DD",
+      "name": "Mothukuri Veeramanidra Chary",
+      "company": "HCLTech",
+      "salary": 4.5,
+      "photo": "",
+      "logo": "HCL tech.jfif"
+    },
+    {
+      "sno": 123,
+      "id": "22WJ8A05EQ",
+      "name": "Ileni sreemanya",
+      "company": "HCLTech",
+      "salary": 4.5,
+      "photo": "",
+      "logo": "HCL tech.jfif"
+    },
+    {
+      "sno": 124,
+      "id": "22WJ8A05MU",
+      "name": "Bobbala snigdha reddy",
+      "company": "HCLTech",
+      "salary": 4.5,
+      "photo": "22WJ8A05MU - Bobbala Snigdha reddy.jpg",
+      "logo": "HCL tech.jfif"
+    },
+    {
+      "sno": 125,
+      "id": "22WJ8A05NF",
+      "name": "Ileni Anudeep Reddy",
+      "company": "HCLTech",
+      "salary": 4.5,
+      "photo": "22WJ8A05NF- Ileni Anudeep Reddy.jpeg",
+      "logo": "HCL tech.jfif"
+    },
+    {
+      "sno": 126,
+      "id": "22WJ8A05P2",
+      "name": "PULUSU KARTHIK",
+      "company": "HCLTech",
+      "salary": 4.5,
+      "photo": "",
+      "logo": "HCL tech.jfif"
+    },
+    {
+      "sno": 127,
+      "id": "22WJ8A05P6",
+      "name": "Shaik abdul mohamad umar",
+      "company": "HCLTech",
+      "salary": 4.5,
+      "photo": "",
+      "logo": "HCL tech.jfif"
+    },
+    {
+      "sno": 128,
+      "id": "22WJ8A05QC",
+      "name": "VANJAKU RAJ KUMAR",
+      "company": "HCLTech",
+      "salary": 4.5,
+      "photo": "22WJ8A05QC- VANJAKU RAJ KUMAR.jpg",
+      "logo": "HCL tech.jfif"
+    },
+    {
+      "sno": 129,
+      "id": "22WJ8A05AX",
+      "name": "RAVANAM AMRUTHA",
+      "company": "Deloitte",
+      "salary": 4.75,
+      "photo": "",
+      "logo": "deloite.png"
+    },
+    {
+      "sno": 130,
+      "id": "22WJ8A05CG",
+      "name": "ERRABOTHU VIKAS REDDY",
+      "company": "Deloitte",
+      "salary": 4.75,
+      "photo": "22WJ8A05CG-Errabothu Vikas Reddy (2).jpg",
+      "logo": "deloite.png"
+    },
+    {
+      "sno": 131,
+      "id": "22WJ8A05AQ",
+      "name": "NEELA AKHIL KUMAR",
+      "company": "CODTECH IT SOLUTIONS",
+      "salary": 6.0,
+      "photo": "",
+      "logo": "codtech.jfif"
+    }
+  ],
+  "total": 131
+}

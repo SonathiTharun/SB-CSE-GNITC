@@ -1,0 +1,303 @@
+<div class="min-h-screen bg-slate-100 dark:bg-slate-900 transition-colors duration-300">
+  
+  <!-- Header -->
+  <header class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg border-b border-slate-200 dark:border-slate-700 sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-4">
+        <img src="assets/logo.png" alt="GNI" class="w-10 h-10 drop-shadow-md">
+        <div>
+          <h1 class="text-xl font-bold text-slate-900 dark:text-white leading-tight">Student Portal</h1>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Placement Cell</p>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-4">
+        <!-- Notification Bell -->
+        <div class="relative">
+          <button (click)="toggleNotifications($event)" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 relative text-slate-600 dark:text-slate-300">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+            </svg>
+            <span *ngIf="unreadCount() > 0" class="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white dark:border-slate-800 animate-pulse"></span>
+          </button>
+
+          <!-- Dropdown -->
+          <div *ngIf="showNotifications()" class="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 overflow-hidden z-50 animate-pop-in origin-top-right transition-all">
+            <div class="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
+              <h3 class="font-bold text-slate-900 dark:text-white">Notifications</h3>
+              <button (click)="markAsRead()" class="text-xs text-primary-500 hover:text-primary-600">Mark all read</button>
+            </div>
+            <div class="max-h-96 overflow-y-auto">
+              <div *ngFor="let n of notifications()" 
+                   class="p-4 border-b border-slate-50 dark:border-slate-700 last:border-0 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors cursor-pointer"
+                   [ngClass]="{'bg-blue-50/50 dark:bg-blue-900/10': !n.read}"
+                   (click)="markAsRead(n._id)">
+                <div class="flex gap-3">
+                  <div [ngClass]="{
+                    'bg-blue-100 text-blue-600': n.type === 'info',
+                    'bg-emerald-100 text-emerald-600': n.type === 'success',
+                    'bg-amber-100 text-amber-600': n.type === 'warning',
+                    'bg-red-100 text-red-600': n.type === 'error'
+                  }" class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">
+                    <span *ngIf="n.type === 'success'">✓</span>
+                    <span *ngIf="n.type === 'error'">✕</span>
+                    <span *ngIf="n.type === 'warning'">!</span>
+                    <span *ngIf="n.type === 'info'">i</span>
+                  </div>
+                  <div>
+                    <h4 class="text-sm font-semibold text-slate-900 dark:text-white">{{ n.title }}</h4>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ n.message }}</p>
+                    <p class="text-[10px] text-slate-400 mt-2">{{ n.createdAt | date:'medium' }}</p>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="notifications().length === 0" class="p-8 text-center text-slate-500">
+                No notifications yet
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button 
+          (click)="confirmLogout()" 
+          class="group flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-red-500 dark:hover:text-red-400 transition-colors rounded-xl hover:bg-red-50 dark:hover:bg-red-900/10">
+          <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+          </svg>
+          Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 py-8 relative">
+    
+    <!-- Loading State -->
+    <div *ngIf="isLoading()" class="absolute inset-0 flex items-center justify-center bg-slate-100/50 dark:bg-slate-900/50 z-10 backdrop-blur-sm min-h-[60vh]">
+      <div class="w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
+    </div>
+
+    <!-- Message Toast -->
+    <div *ngIf="message()" class="fixed top-24 right-6 z-50 animate-bounce-in">
+      <div [ngClass]="{
+        'bg-emerald-500': message()?.type === 'success',
+        'bg-red-500': message()?.type === 'error'
+      }" class="text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-3">
+        <span *ngIf="message()?.type === 'success'">✓</span>
+        <span *ngIf="message()?.type === 'error'">✕</span>
+        {{ message()?.text }}
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      
+      <!-- Left Column: Profile -->
+      <div class="lg:col-span-1 space-y-6">
+        <!-- Profile Card -->
+        <div class="profile-card bg-white dark:bg-slate-800 rounded-3xl p-8 border border-slate-200 dark:border-slate-700 shadow-xl overflow-hidden relative group">
+          <div class="absolute top-0 left-0 w-full h-24 bg-gradient-to-r from-primary-500 to-primary-600"></div>
+          
+          <div class="relative flex flex-col items-center mt-8">
+            <div class="relative mb-4">
+              <!-- Photo or Initial -->
+              <div class="w-32 h-32 rounded-full border-4 border-white dark:border-slate-800 shadow-lg overflow-hidden bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-4xl font-bold text-slate-400 group-hover:scale-105 transition-transform duration-300">
+                <img *ngIf="student()?.photo" [src]="'/api/photo/' + student()?.photo" [alt]="student()?.name || 'Student Photo'" [title]="student()?.name || 'Student Photo'" class="w-full h-full object-cover">
+                <span *ngIf="!student()?.photo">{{ getInitial(student()?.name) }}</span>
+              </div>
+              
+              <!-- Upload Button -->
+              <button 
+                (click)="showUploadModal.set(true)"
+                class="absolute bottom-0 right-0 p-2.5 bg-primary-500 text-white rounded-full shadow-lg hover:bg-primary-600 transition-colors hover:scale-110"
+                title="Update Photo">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              </button>
+            </div>
+
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white text-center">{{ student()?.name || 'Student' }}</h2>
+            <p class="text-sm font-mono bg-slate-100 dark:bg-slate-700 px-3 py-1 rounded-full mt-2 text-slate-600 dark:text-slate-300">
+              {{ student()?.studentId }}
+            </p>
+            
+            <div *ngIf="!student()?.photo" class="mt-4 px-4 py-2 bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 text-xs rounded-lg flex items-center gap-2">
+              <span>⚠️ Photo required for placement submission</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Placement Form -->
+        <div class="placement-form bg-white dark:bg-slate-800 rounded-3xl p-8 border border-slate-200 dark:border-slate-700 shadow-lg">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Submit Placement</h3>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Company Name</label>
+              <select 
+                [(ngModel)]="placementForm.company"
+                title="Select Company"
+                class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all outline-none appearance-none">
+                <option value="" disabled selected>Select Company</option>
+                <option *ngFor="let c of companies()" [value]="c.name">{{ c.name }}</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Package (LPA)</label>
+              <input 
+                type="number" 
+                [(ngModel)]="placementForm.salary"
+                placeholder="0.00"
+                step="0.1"
+                class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all outline-none">
+            </div>
+
+            <button 
+              (click)="submitPlacement()"
+              [disabled]="isSubmitting() || !student()?.photo"
+              class="w-full py-3.5 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold rounded-xl shadow-lg shadow-emerald-500/30 hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+              <span *ngIf="isSubmitting()" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+              {{ isSubmitting() ? 'Submitting...' : 'Submit Details' }}
+            </button>
+            
+            <p *ngIf="!student()?.photo" class="text-xs text-red-500 text-center">
+              Please upload your photo first to enable submission.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: My Placements -->
+      <div class="lg:col-span-2">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-3">
+          <span>My Placements</span>
+          <span class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-sm py-1 px-3 rounded-full">{{ myPlacements().length }}</span>
+        </h3>
+
+        <div *ngIf="myPlacements().length === 0" class="bg-white dark:bg-slate-800 rounded-3xl p-12 text-center border border-slate-200 dark:border-slate-700 border-dashed">
+          <div class="w-20 h-20 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4 grayscale opacity-50">
+            <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          </div>
+          <p class="text-slate-500 dark:text-slate-400 text-lg">No placements submitted yet.</p>
+          <p class="text-slate-400 dark:text-slate-500 text-sm mt-1">Got placed? Submit your details on the left.</p>
+        </div>
+
+        <div class="space-y-4">
+          <div *ngFor="let p of myPlacements()" class="placement-item bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-lg transition-all border-l-4 relative group"
+               [ngClass]="{
+                 'border-l-emerald-500': p.verificationStatus === 'verified',
+                 'border-l-amber-500': p.verificationStatus === 'pending',
+                 'border-l-red-500': p.verificationStatus === 'rejected'
+               }">
+            <div class="flex items-center justify-between flex-wrap gap-4">
+              <div>
+                <h4 class="text-xl font-bold text-slate-900 dark:text-white">{{ p.company }}</h4>
+                <div class="flex items-center gap-3 mt-1">
+                  <span class="text-lg font-medium text-slate-700 dark:text-slate-300">{{ p.salary }} LPA</span>
+                  <span class="text-xs text-slate-400">• {{ p.createdAt | date:'mediumDate' }}</span>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-4">
+                <!-- Status Badge -->
+                <div class="px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2"
+                     [ngClass]="{
+                       'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400': p.verificationStatus === 'verified',
+                       'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400': p.verificationStatus === 'pending',
+                       'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400': p.verificationStatus === 'rejected'
+                     }">
+                  <span *ngIf="p.verificationStatus === 'verified'" class="animate-pulse-slow">✓ Verified</span>
+                  <span *ngIf="p.verificationStatus === 'pending'" class="animate-pulse">⏳ Pending Review</span>
+                  <span *ngIf="p.verificationStatus === 'rejected'">✕ Rejected</span>
+                </div>
+
+                <!-- Delete Action (Only for pending/rejected) -->
+                <button 
+                  *ngIf="p.verificationStatus !== 'verified'"
+                  (click)="deletePlacement(p._id)"
+                  class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-colors"
+                  title="Delete submission">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a2 2 0 00-1-1h-4a2 2 0 00-1 1v3M4 7h16"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Photo Upload Modal -->
+  <div *ngIf="showUploadModal()" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl p-8 max-w-md w-full shadow-2xl scale-100 animate-pop-in">
+      <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-4">Update Profile Photo</h3>
+      <p class="text-slate-500 dark:text-slate-400 mb-6 text-sm">Please upload a clear, professional photo. This will be used for your official placement records.</p>
+      
+      <div 
+        class="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl p-8 text-center hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/10 transition-colors cursor-pointer mb-6"
+        (click)="fileInput.click()">
+        <input 
+          #fileInput 
+          type="file" 
+          hidden 
+          accept="image/*"
+          (change)="onFileSelected($event)">
+        
+        <div *ngIf="!selectedFile">
+          <svg class="w-12 h-12 text-slate-400 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          <p class="font-medium text-slate-700 dark:text-slate-300">Click to upload photo</p>
+          <p class="text-xs text-slate-400 mt-1">PNG, JPG up to 2MB</p>
+        </div>
+
+        <div *ngIf="selectedFile">
+          <p class="font-bold text-primary-600 break-all">{{ selectedFile.name }}</p>
+          <p class="text-xs text-slate-400 mt-1">{{ (selectedFile.size / 1024 / 1024).toFixed(2) }} MB</p>
+        </div>
+      </div>
+
+      <div class="flex gap-3">
+        <button 
+          (click)="showUploadModal.set(false)" 
+          class="flex-1 px-4 py-3 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium rounded-xl hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
+          Cancel
+        </button>
+        <button 
+          (click)="uploadPhoto()" 
+          [disabled]="!selectedFile || isSubmitting()"
+          class="flex-1 px-4 py-3 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-xl shadow-lg shadow-primary-500/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+          {{ isSubmitting() ? 'Uploading...' : 'Save Photo' }}
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- Logout Confirmation Modal -->
+  <div *ngIf="showLogoutModal()" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity" style="animation: fadeIn 0.3s ease-out;">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl p-8 max-w-sm w-full shadow-2xl scale-100 animate-pop-in border border-slate-100 dark:border-slate-700">
+      <div class="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+        <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+        </svg>
+      </div>
+      
+      <h3 class="text-xl font-bold text-slate-900 dark:text-white text-center mb-2">Sign Out</h3>
+      <p class="text-slate-500 dark:text-slate-400 text-center mb-8">Are you sure you want to sign out?</p>
+      
+      <div class="flex gap-3">
+        <button 
+          (click)="showLogoutModal.set(false)" 
+          class="flex-1 px-4 py-3 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold rounded-xl hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
+          Cancel
+        </button>
+        <button 
+          (click)="logout()" 
+          class="flex-1 px-4 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold rounded-xl shadow-lg shadow-red-500/30 transition-all hover:scale-105 active:scale-95">
+          Sign Out
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

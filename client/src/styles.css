@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Base Styles */
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  
+  body {
+    @apply font-sans antialiased;
+  }
+}
+
+/* Custom Component Classes */
+@layer components {
+  /* Glassmorphism Card */
+  .glass-card {
+    @apply backdrop-blur-xl bg-white/20 border border-white/30 shadow-2xl;
+  }
+  
+  .glass-card-dark {
+    @apply backdrop-blur-xl bg-slate-900/40 border border-white/10 shadow-2xl;
+  }
+  
+  /* Gradient Backgrounds */
+  .gradient-primary {
+    @apply bg-gradient-to-r from-primary-500 to-primary-600;
+  }
+  
+  .gradient-accent {
+    @apply bg-gradient-to-r from-accent-500 to-accent-600;
+  }
+  
+  /* Premium Button */
+  .btn-primary {
+    @apply px-6 py-3 rounded-xl font-semibold text-white 
+           bg-gradient-to-r from-primary-500 to-primary-600
+           hover:from-primary-600 hover:to-primary-700
+           shadow-lg shadow-primary-500/30
+           transform transition-all duration-300
+           hover:-translate-y-0.5 hover:shadow-xl hover:shadow-primary-500/40
+           active:translate-y-0 active:shadow-md
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+  
+  .btn-secondary {
+    @apply px-6 py-3 rounded-xl font-semibold
+           bg-white/10 backdrop-blur-sm border border-white/20
+           text-white hover:bg-white/20
+           transform transition-all duration-300
+           hover:-translate-y-0.5
+           focus:outline-none focus:ring-2 focus:ring-white/50;
+  }
+  
+  /* Premium Input */
+  .input-glass {
+    @apply w-full px-4 py-3 rounded-xl
+           bg-white/10 backdrop-blur-sm border border-white/20
+           text-white placeholder-white/50
+           focus:outline-none focus:border-white/40 focus:bg-white/15
+           transition-all duration-300;
+  }
+  
+  .input-solid {
+    @apply w-full px-4 py-3 rounded-xl
+           bg-slate-50 border-2 border-slate-200
+           text-slate-900 placeholder-slate-400
+           focus:outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10
+           transition-all duration-300;
+  }
+  
+  /* Icon Container */
+  .icon-container {
+    @apply absolute left-4 top-1/2 -translate-y-1/2 text-white/50;
+  }
+}
+
+/* Background Slideshow Animation */
+@keyframes kenburns {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.1);
+  }
+}
+
+.bg-slideshow {
+  animation: kenburns 20s ease-in-out infinite alternate;
+}
+
+/* Dark Mode Transitions */
+.dark-mode-transition {
+  @apply transition-colors duration-300;
+}

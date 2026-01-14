@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSE Special Batch - Placement Report 2025</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-content">
+          <div class="logo-section">
+            <div class="college-badge">GNITC</div>
+            <div class="title-section">
+              <h1>CSE Special Batch - Placement Report</h1>
+              <p class="subtitle">
+                Academic Year 2024-2025 | Total Placements:
+                <span id="totalCount">131</span>
+              </p>
+            </div>
+          </div>
+          <div class="stats-cards">
+            <div class="stat-card">
+              <span class="stat-number" id="studentsWithPhotos">0</span>
+              <span class="stat-label">With Photos</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-number" id="uniqueCompanies">0</span>
+              <span class="stat-label">Companies</span>
+            </div>
+            <div class="stat-card highlight">
+              <span class="stat-number" id="avgPackage">0</span>
+              <span class="stat-label">Avg LPA</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Controls -->
+      <div class="controls">
+        <div class="search-box">
+          <svg
+            class="search-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search by name or ID..."
+          />
+        </div>
+
+        <div class="filter-group">
+          <select id="companyFilter" aria-label="Filter by Company">
+            <option value="">All Companies</option>
+          </select>
+
+          <select id="sortBy" aria-label="Sort Students">
+            <option value="sno">Sort by S.No</option>
+            <option value="name">Sort by Name</option>
+            <option value="salary-high">Salary: High to Low</option>
+            <option value="salary-low">Salary: Low to High</option>
+            <option value="company">Sort by Company</option>
+          </select>
+        </div>
+
+        <div class="export-buttons">
+          <button class="btn btn-pdf" onclick="exportToPDF()">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+              ></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+            PDF
+          </button>
+          <button class="btn btn-excel" onclick="exportToExcel()">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="3" y1="9" x2="21" y2="9"></line>
+              <line x1="3" y1="15" x2="21" y2="15"></line>
+              <line x1="9" y1="3" x2="9" y2="21"></line>
+              <line x1="15" y1="3" x2="15" y2="21"></line>
+            </svg>
+            Excel
+          </button>
+          <button class="btn btn-word" onclick="exportToWord()">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+              ></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <path d="M9 15l2 2 4-4"></path>
+            </svg>
+            Word
+          </button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-container">
+        <table id="placementTable">
+          <thead>
+            <tr>
+              <th class="col-sno">S.No</th>
+              <th class="col-photo">Photo</th>
+              <th class="col-id">Student ID</th>
+              <th class="col-name">Name</th>
+              <th class="col-company">Company</th>
+              <th class="col-logo">Logo</th>
+              <th class="col-salary">Package (LPA)</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <!-- Data will be inserted here -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <p>
+          Generated on <span id="currentDate"></span> | GNITC Placement Cell
+        </p>
+      </footer>
+    </div>
+
+    <script src="embedded_data.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Environment
+.env
+.DS_Store
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
+
+# User Uploads (Keep the directory, ignore content)
+/photos/*
+!/photos/.gitkeep
+/logos/*
+!/logos/.gitkeep
+*.jpg
+*.jpeg
+*.png
+!logo.png
+!favicon.ico
+
+# Build
+dist/
+build/

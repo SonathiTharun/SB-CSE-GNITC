@@ -1,0 +1,205 @@
+<!-- Main Container with Background Slideshow -->
+<div class="relative min-h-screen w-full overflow-hidden">
+  
+  <!-- Background Images Slideshow -->
+  <div class="absolute inset-0 bg-slate-900">
+    <ng-container *ngFor="let img of backgroundImages; let i = index">
+      <div 
+        class="absolute inset-0 transition-opacity duration-1000"
+        [ngClass]="{'opacity-100': currentBgIndex() === i, 'opacity-0': currentBgIndex() !== i}">
+        <img 
+          [src]="img" 
+          alt="Campus background"
+          class="w-full h-full object-cover object-center" />
+      </div>
+    </ng-container>
+    
+    <!-- Light Gradient Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-r from-slate-900/40 via-transparent to-slate-900/20"></div>
+  </div>
+
+  <!-- Slide Indicators -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+    <ng-container *ngFor="let img of backgroundImages; let i = index">
+      <button 
+        type="button"
+        (click)="currentBgIndex.set(i)"
+        [attr.aria-label]="'Go to slide ' + (i + 1)"
+        [title]="'Slide ' + (i + 1)"
+        class="w-2.5 h-2.5 rounded-full transition-all duration-300 flex items-center justify-center"
+        [ngClass]="{'bg-white w-8': currentBgIndex() === i, 'bg-white/40': currentBgIndex() !== i}">
+        <span class="sr-only">Slide {{ i + 1 }}</span>
+      </button>
+    </ng-container>
+  </div>
+
+  <!-- Dark Mode Toggle -->
+  <button 
+    type="button"
+    (click)="toggleDarkMode()"
+    aria-label="Toggle dark mode"
+    title="Toggle Dark Mode"
+    class="absolute top-6 right-6 z-30 p-3 rounded-full glass-card hover:bg-white/30 transition-all duration-300">
+    <!-- Sun Icon -->
+    <svg *ngIf="isDarkMode" class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+    </svg>
+    <!-- Moon Icon -->
+    <svg *ngIf="!isDarkMode" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+        d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+    </svg>
+  </button>
+
+  <!-- Main Content -->
+  <div class="relative z-10 min-h-screen flex items-center justify-center p-6">
+    <div class="w-full max-w-5xl flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
+      
+      <!-- Brand Section (Left) -->
+      <div class="brand-section text-center lg:text-left lg:flex-1">
+        <!-- Logo -->
+        <div class="mb-6">
+          <img 
+            src="assets/logo.png" 
+            alt="GNI Logo" 
+            class="w-24 h-24 lg:w-32 lg:h-32 mx-auto lg:mx-0 drop-shadow-2xl" />
+        </div>
+        
+        <!-- Title -->
+        <h1 class="text-3xl lg:text-4xl font-bold text-white mb-3">
+          CSE Placement<br/>Portal
+        </h1>
+        
+        <p class="text-white/70 text-lg mb-4">
+          Guru Nanak Institutions<br/>
+          Technical Campus
+        </p>
+        
+        <div class="hidden lg:block">
+          <div class="flex items-center gap-3 text-white/50 text-sm">
+            <div class="w-12 h-px bg-white/30"></div>
+            <span>Special Batch 2025</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Login Card (Right) -->
+      <div class="login-card w-full max-w-md">
+        <div class="glass-card rounded-3xl p-8 lg:p-10">
+          
+          <!-- Card Header -->
+          <div class="text-center mb-8 form-element">
+            <h2 class="text-2xl font-bold text-white mb-2">Welcome Back</h2>
+            <p class="text-white/60">Sign in to your account</p>
+          </div>
+
+          <!-- Error Message -->
+          <div *ngIf="errorMessage()" class="mb-6 p-4 rounded-xl bg-red-500/20 border border-red-500/30 text-red-200 text-sm flex items-center gap-3 form-element">
+            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span>{{ errorMessage() }}</span>
+          </div>
+
+          <!-- Login Form -->
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            
+            <!-- Username/Employee ID -->
+            <div class="mb-5 form-element">
+              <label class="block text-white/70 text-sm font-medium mb-2">
+                Employee ID / Student ID
+              </label>
+              <div class="relative">
+                <div class="icon-container">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                  </svg>
+                </div>
+                <input 
+                  type="text" 
+                  formControlName="username"
+                  placeholder="Enter your ID"
+                  class="input-glass pl-12"
+                  [ngClass]="{'border-red-500/50': usernameControl?.invalid && usernameControl?.touched}" />
+              </div>
+              <p *ngIf="usernameControl?.invalid && usernameControl?.touched" class="mt-2 text-red-400 text-xs">Please enter a valid ID</p>
+            </div>
+
+            <!-- Password -->
+            <div class="mb-6 form-element">
+              <label class="block text-white/70 text-sm font-medium mb-2">
+                Password
+              </label>
+              <div class="relative">
+                <div class="icon-container">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                  </svg>
+                </div>
+                <input 
+                  [type]="showPassword() ? 'text' : 'password'" 
+                  formControlName="password"
+                  placeholder="Enter your password"
+                  class="input-glass pl-12 pr-12"
+                  [ngClass]="{'border-red-500/50': passwordControl?.invalid && passwordControl?.touched}" />
+                
+                <!-- Toggle Password Visibility -->
+                <button 
+                  type="button"
+                  (click)="togglePassword()"
+                  aria-label="Toggle password visibility"
+                  class="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors">
+                  <!-- Eye Off Icon -->
+                  <svg *ngIf="showPassword()" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
+                  </svg>
+                  <!-- Eye Icon -->
+                  <svg *ngIf="!showPassword()" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                  </svg>
+                </button>
+              </div>
+              <p *ngIf="passwordControl?.invalid && passwordControl?.touched" class="mt-2 text-red-400 text-xs">Password is required</p>
+            </div>
+
+            <!-- Submit Button -->
+            <button 
+              type="submit" 
+              [disabled]="isLoading()"
+              class="w-full btn-primary py-4 text-lg form-element disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none">
+              <div *ngIf="isLoading()" class="flex items-center justify-center gap-3">
+                <svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>Signing in...</span>
+              </div>
+              <span *ngIf="!isLoading()">Login</span>
+            </button>
+
+          </form>
+
+          <!-- Footer -->
+          <div class="mt-8 text-center form-element">
+            <a href="#" class="text-white/50 hover:text-white text-sm transition-colors">
+              Forgot Password?
+            </a>
+          </div>
+        </div>
+
+        <!-- Powered By -->
+        <p class="text-center text-white/40 text-xs mt-6">
+          GNITC - CSE Special Batch 2025
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
