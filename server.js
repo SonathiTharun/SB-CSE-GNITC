@@ -107,41 +107,27 @@ app.use(session({
   }
 }));
 
-// Email Config - Using Resend (works better on Render than Gmail SMTP)
-const { Resend } = require('resend');
-const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
-
-// Fallback Gmail transporter (for local dev)
+// Email Config - Using Gmail with Port 465 (SSL) to bypass Render blocks
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, // Use SSL
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     }
 });
 
-// Helper: Send Email (uses Resend in production, Gmail locally)
+// Helper: Send Email
 async function sendEmail(to, subject, html) {
     try {
-        if (resend && process.env.NODE_ENV === 'production') {
-            // Use Resend in production
-            await resend.emails.send({
-                from: 'GNITC Placement Portal <onboarding@resend.dev>',
-                to: [to],
-                subject: subject,
-                html: html
-            });
-            console.log(`📧 [Resend] Email sent to ${to}: ${subject}`);
-        } else {
-            // Fallback to Gmail for local development
-            await transporter.sendMail({
-                from: `"GNITC Special Batch" <${process.env.EMAIL_USER}>`,
-                to,
-                subject,
-                html
-            });
-            console.log(`📧 [Gmail] Email sent to ${to}: ${subject}`);
-        }
+        await transporter.sendMail({
+            from: `"GNITC Placement Portal" <${process.env.EMAIL_USER}>`,
+            to,
+            subject,
+            html
+        });
+        console.log(`📧 Email sent to ${to}: ${subject}`);
     } catch (e) {
         console.error(`❌ Email error: ${e.message}`);
     }
