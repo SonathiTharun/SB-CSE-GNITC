@@ -1019,7 +1019,7 @@
             >
               <img
                 *ngIf="c.logo"
-                [src]="'/api/logos/' + c.logo"
+                [src]="c.logo.startsWith('http') ? c.logo : 'https://sb-cse-gnitc-api.onrender.com/api/logos/' + c.logo"
                 [alt]="c.name"
                 [title]="c.name"
                 [attr.aria-label]="c.name"
