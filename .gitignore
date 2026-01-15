@@ -5,6 +5,7 @@ package-lock.json
 # Environment
 .env
 .DS_Store
+debug*.js
 
 # Logs
 npm-debug.log*

@@ -1,0 +1,47 @@
+
+> client@0.0.0 build
+> ng build
+
+- Building...
+
+Application bundle generation failed. [12.087 seconds]
+
+X [ERROR] NG8002: Can't bind to 'aria-label' since it isn't a known property of 'img'. [plugin angular-compiler]
+
+    src/app/features/dashboard/dashboard.component.html:567:26:
+      567 │                           aria-label="{{ student.name }}"
+          ╵                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Error occurs in the template of component DashboardComponent.
+
+    src/app/features/dashboard/dashboard.component.ts:28:15:
+      28 │   templateUrl: './dashboard.component.html',
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] NG8002: Can't bind to 'aria-label' since it isn't a known property of 'img'. [plugin angular-compiler]
+
+    src/app/features/dashboard/dashboard.component.html:1025:16:
+      1025 │                 aria-label="{{ c.name }}"
+           ╵                 ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Error occurs in the template of component DashboardComponent.
+
+    src/app/features/dashboard/dashboard.component.ts:28:15:
+      28 │   templateUrl: './dashboard.component.html',
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] NG8002: Can't bind to 'aria-label' since it isn't a known property of 'img'. [plugin angular-compiler]
+
+    src/app/features/dashboard/dashboard.component.html:1130:101:
+      1130 │ ... [title]="s.name" aria-label="{{ s.name }}" class="w-10 h-10 ...
+           ╵                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Error occurs in the template of component DashboardComponent.
+
+    src/app/features/dashboard/dashboard.component.ts:28:15:
+      28 │   templateUrl: './dashboard.component.html',
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+

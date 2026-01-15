@@ -564,6 +564,7 @@
                           [src]="'/api/photo/' + student.photo"
                           [alt]="student.name"
                           [title]="student.name"
+                          [attr.aria-label]="student.name"
                           class="w-full h-full object-cover"
                         />
                         <span
@@ -1021,6 +1022,7 @@
                 [src]="'/api/logos/' + c.logo"
                 [alt]="c.name"
                 [title]="c.name"
+                [attr.aria-label]="c.name"
                 class="max-w-full max-h-full object-contain"
               />
               <span *ngIf="!c.logo" class="text-lg">🏢</span>
@@ -1125,7 +1127,7 @@
             <tr *ngFor="let s of previewData(); let i = index" class="border-t border-slate-100 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/30">
               <td class="px-4 py-3 font-medium">{{ i + 1 }}</td>
               <td class="px-4 py-3 text-center">
-                <img *ngIf="s.photo" [src]="'/api/photo/' + s.photo" [alt]="s.name" [title]="s.name" class="w-10 h-10 rounded-lg object-cover mx-auto">
+                <img *ngIf="s.photo" [src]="'/api/photo/' + s.photo" [alt]="s.name" [title]="s.name" [attr.aria-label]="s.name" class="w-10 h-10 rounded-lg object-cover mx-auto">
                 <div *ngIf="!s.photo" class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold mx-auto">{{ getInitial(s.name) }}</div>
               </td>
               <td class="px-4 py-3">
@@ -1156,7 +1158,7 @@
     </div>
   </div>
   <!-- Logout Confirmation Modal -->
-  <div *ngIf="showLogoutModal()" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity" style="animation: fadeIn 0.3s ease-out;">
+  <div *ngIf="showLogoutModal()" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity animate-fade-in">
     <div class="bg-white dark:bg-slate-800 rounded-3xl p-8 max-w-sm w-full shadow-2xl scale-100 animate-pop-in border border-slate-100 dark:border-slate-700">
       <div class="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
         <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">

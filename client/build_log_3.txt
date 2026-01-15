@@ -1,0 +1,28 @@
+
+> client@0.0.0 build
+> ng build
+
+- Building...
+
+Initial chunk files   | Names               |  Raw size | Estimated transfer size
+chunk-EDVDJJFO.js     | -                   | 234.08 kB |                63.62 kB
+main-UW43HPZ4.js      | main                |  62.39 kB |                16.51 kB
+styles-YZQZMSTB.css   | styles              |  55.84 kB |                 6.42 kB
+polyfills-FFHMD2TL.js | polyfills           |  33.71 kB |                11.02 kB
+chunk-TMC7WMLO.js     | -                   | 830 bytes |               830 bytes
+
+                      | Initial total       | 386.83 kB |                98.38 kB
+
+Lazy chunk files      | Names               |  Raw size | Estimated transfer size
+chunk-MSMPFMLG.js     | dashboard-component | 626.91 kB |               139.25 kB
+chunk-RIIKXKD6.js     | xlsx                | 422.15 kB |               116.71 kB
+chunk-QYWDP3U5.js     | -                   | 107.34 kB |                32.34 kB
+chunk-VGBQGCHR.js     | student-component   |  28.11 kB |                 6.76 kB
+chunk-EYPU4SVG.js     | login-component     |  13.38 kB |                 4.13 kB
+chunk-CUS2A6FH.js     | -                   |   3.23 kB |                 1.10 kB
+chunk-YGXIR26T.js     | -                   |   1.29 kB |               457 bytes
+
+Output location: D:\SB photos\New folder\client\dist\client
+
+Application bundle generation complete. [14.521 seconds]
+
