@@ -1004,8 +1004,8 @@ app.get('/download/excel', requireAdmin, async (req, res) => {
     const newPlacements = await Placement.find(placementQuery);
     
     const allData = [
-      ...students.map((s, i) => ({ 'S.No': i + 1, 'Student ID': s.id, 'Name': s.name, 'Company': s.company, 'Package (LPA)': s.salary, 'Type': 'Original' })),
-      ...newPlacements.map((p, i) => ({ 'S.No': students.length + i + 1, 'Student ID': p.studentId, 'Name': p.name, 'Company': p.company, 'Package (LPA)': p.salary, 'Type': 'New' }))
+      ...students.map((s, i) => ({ 'S.No': i + 1, 'Student ID': s.id, 'Name': s.name, 'Photo': s.photo, 'Company': s.company, 'Package (LPA)': s.salary, 'Type': 'Original' })),
+      ...newPlacements.map((p, i) => ({ 'S.No': students.length + i + 1, 'Student ID': p.studentId, 'Name': p.name, 'Photo': p.photo, 'Company': p.company, 'Package (LPA)': p.salary, 'Type': 'New' }))
     ];
     
     const wb = XLSX.utils.book_new();
@@ -1021,6 +1021,37 @@ app.get('/download/excel', requireAdmin, async (req, res) => {
   }
 });
 
+// Helper to fetch image to base64 (supports URL and local)
+async function fetchImageToBase64(imagePathOrUrl) {
+  if (!imagePathOrUrl) return '';
+
+  if (imagePathOrUrl.startsWith('http')) {
+    try {
+      const response = await fetch(imagePathOrUrl);
+      if (!response.ok) return '';
+      const arrayBuffer = await response.arrayBuffer();
+      return Buffer.from(arrayBuffer).toString('base64');
+    } catch (e) {
+      console.error('Failed to fetch image:', imagePathOrUrl, e.message);
+      return '';
+    }
+  } else {
+    // Local fallback (for old images if any or logos folder)
+    // Attempt relative to __dirname first, then try logos/
+    let localPath = path.join(__dirname, imagePathOrUrl);
+    
+    // Check if it's in logos folder explicitly locally
+    if (!fs.existsSync(localPath) && !imagePathOrUrl.includes('/')) {
+         localPath = path.join(__dirname, 'logos', imagePathOrUrl);
+    }
+
+    if (fs.existsSync(localPath)) {
+      return fs.readFileSync(localPath).toString('base64');
+    }
+    return '';
+  }
+}
+
 app.get('/download/word', requireAdmin, async (req, res) => {
   try {
     const filter = req.query.filter || 'all';
@@ -1035,23 +1066,25 @@ app.get('/download/word', requireAdmin, async (req, res) => {
     
     const allPlacements = [...students, ...newPlacements];
     
-    let rows = allPlacements.map((s, i) => {
+    // Process rows concurrently for speed
+    const rowPromises = allPlacements.map(async (s, i) => {
       let photoImg = '', logoImg = '';
-      const photoPath = path.join(__dirname, s.photo || '');
-      if (fs.existsSync(photoPath)) {
-        const base64 = fs.readFileSync(photoPath).toString('base64');
-        photoImg = `<img src="data:image/jpeg;base64,${base64}" width="50" height="60">`;
+      
+      const photoB64 = await fetchImageToBase64(s.photo);
+      if (photoB64) {
+        photoImg = `<img src="data:image/jpeg;base64,${photoB64}" width="50" height="60">`;
       }
-      if (s.logo) {
-        const logoPath = path.join(__dirname, 'logos', s.logo);
-        if (fs.existsSync(logoPath)) {
-          const base64 = fs.readFileSync(logoPath).toString('base64');
-          logoImg = `<img src="data:image/jpeg;base64,${base64}" width="40" height="25">`;
-        }
+      
+      const logoB64 = await fetchImageToBase64(s.logo);
+      if (logoB64) {
+        logoImg = `<img src="data:image/jpeg;base64,${logoB64}" width="40" height="25">`;
       }
+
       const studentId = s.studentId || s.id;
       return `<tr style="background:${i%2===0?'#f8f8f8':'white'}"><td style="border:1px solid #ccc;padding:8px">${i+1}</td><td style="border:1px solid #ccc;padding:5px">${photoImg}</td><td style="border:1px solid #ccc;padding:8px"><b>${s.name}</b><br><small>${studentId}</small></td><td style="border:1px solid #ccc;padding:8px">${s.company}</td><td style="border:1px solid #ccc;padding:5px">${logoImg}</td><td style="border:1px solid #ccc;padding:8px;color:green"><b>${s.salary} LPA</b></td></tr>`;
-    }).join('');
+    });
+
+    const rows = (await Promise.all(rowPromises)).join('');
     
     const html = `<html><head><meta charset="utf-8"><style>body{font-family:Calibri;margin:30px}h1{text-align:center}table{width:100%;border-collapse:collapse}th{background:#1e293b;color:white;padding:10px}</style></head><body><h1>CSE Placement Report 2025</h1><table><tr><th>S.No</th><th>Photo</th><th>Name/ID</th><th>Company</th><th>Logo</th><th>Package</th></tr>${rows}</table></body></html>`;
     
@@ -1059,6 +1092,7 @@ app.get('/download/word', requireAdmin, async (req, res) => {
     res.setHeader('Content-Disposition', 'attachment; filename="CSE_Placement_Report.doc"');
     res.send(html);
   } catch (err) {
+    console.error('Word Export Error:', err);
     res.status(500).send('Error: ' + err.message);
   }
 });
@@ -1069,22 +1103,25 @@ app.get('/preview/word', requireAdmin, async (req, res) => {
     const newPlacements = await Placement.find({ isOriginal: false });
     const all = [...students, ...newPlacements];
     
-    let rows = all.map((s, i) => {
+    const rowPromises = all.map(async (s, i) => {
       let photo = '', logo = '';
-      const photoPath = path.join(__dirname, s.photo || '');
-      if (fs.existsSync(photoPath)) {
-        photo = `<img src="data:image/jpeg;base64,${fs.readFileSync(photoPath).toString('base64')}" width="55" height="70" style="border-radius:5px">`;
+      
+      const photoB64 = await fetchImageToBase64(s.photo);
+      if (photoB64) {
+        photo = `<img src="data:image/jpeg;base64,${photoB64}" width="55" height="70" style="border-radius:5px">`;
       }
-      if (s.logo) {
-        const logoPath = path.join(__dirname, 'logos', s.logo);
-        if (fs.existsSync(logoPath)) {
-          logo = `<img src="data:image/jpeg;base64,${fs.readFileSync(logoPath).toString('base64')}" width="45" height="30">`;
-        }
+      
+      const logoB64 = await fetchImageToBase64(s.logo);
+      if (logoB64) {
+        logo = `<img src="data:image/jpeg;base64,${logoB64}" width="45" height="30">`;
       }
+
       const isNew = !s.sno;
       const badge = isNew ? '<span style="background:#fef3c7;color:#92400e;padding:2px 6px;border-radius:4px;font-size:10px;margin-left:5px">NEW</span>' : '';
       return `<tr style="background:${i%2===0?'#f8fafc':'white'}"><td style="border:1px solid #e2e8f0;padding:12px">${i+1}</td><td style="border:1px solid #e2e8f0;padding:8px">${photo}</td><td style="border:1px solid #e2e8f0;padding:12px"><strong>${s.name}</strong>${badge}<br><span style="color:#64748b">${s.studentId||s.id}</span></td><td style="border:1px solid #e2e8f0;padding:12px">${s.company}</td><td style="border:1px solid #e2e8f0;padding:8px">${logo}</td><td style="border:1px solid #e2e8f0;padding:12px"><span style="background:#d1fae5;padding:6px 12px;border-radius:20px;font-weight:bold;color:#065f46">${s.salary} LPA</span></td></tr>`;
-    }).join('');
+    });
+
+    const rows = (await Promise.all(rowPromises)).join('');
     
     res.send(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Preview</title><style>body{font-family:Calibri;margin:0;padding:20px;background:#667eea}.container{max-width:1100px;margin:0 auto;background:white;border-radius:16px;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,0.3)}.header{background:#1e293b;color:white;padding:30px;text-align:center}.btn-bar{padding:25px;background:#f0fdf4;text-align:center}.btn{display:inline-block;padding:14px 35px;margin:0 10px;border-radius:10px;font-weight:600;text-decoration:none}.btn-word{background:#3b82f6;color:white}.btn-excel{background:#10b981;color:white}.btn-print{background:#f59e0b;color:white;border:none;cursor:pointer}table{width:100%;border-collapse:collapse}th{background:#1e293b;color:white;padding:14px}</style></head><body><div class="container"><div class="header"><h1>CSE Placement Report 2025</h1><p>Total: ${all.length} placements</p></div><div class="btn-bar"><a href="/download/word" class="btn btn-word">📄 Word</a><a href="/download/excel" class="btn btn-excel">📊 Excel</a><button class="btn btn-print" onclick="window.print()">🖨️ Print</button></div><div style="padding:30px"><table><tr><th>S.No</th><th>Photo</th><th>Name/ID</th><th>Company</th><th>Logo</th><th>Package</th></tr>${rows}</table></div></div></body></html>`);
   } catch (err) {
