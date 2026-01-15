@@ -664,7 +664,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       );
     }
     
-    return company?.logo ? `http://localhost:3000/api/logos/${company.logo}` : null;
+    return company?.logo ? `https://sb-cse-gnitc-api.onrender.com/api/logos/${company.logo}` : null;
   }
 
   exportToExcel(filter: 'verified' | 'all' = 'all'): void {
@@ -681,12 +681,12 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         if (s.placements && s.placements.length > 0) {
           s.placements.forEach(p => {
             // Try stored logo first, then lookup by company name
-            const logoUrl = p.logo ? `http://localhost:3000/api/logos/${p.logo}` : this.getCompanyLogo(p.company);
+            const logoUrl = p.logo ? `https://sb-cse-gnitc-api.onrender.com/api/logos/${p.logo}` : this.getCompanyLogo(p.company);
             data.push({
               'S.No': sno++,
               'Student ID': s.studentId,
               'Student Name': s.name,
-              'Photo Link': s.photo ? `http://localhost:3000/api/photo/${s.photo}` : 'No Photo',
+              'Photo Link': s.photo ? `https://sb-cse-gnitc-api.onrender.com/api/photo/${s.photo}` : 'No Photo',
               'Company': p.company,
               'Company Logo': logoUrl || 'No Logo',
               'Package (LPA)': p.salary,
@@ -698,7 +698,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             'S.No': sno++,
             'Student ID': s.studentId,
             'Student Name': s.name,
-            'Photo Link': s.photo ? `http://localhost:3000/api/photo/${s.photo}` : 'No Photo',
+            'Photo Link': s.photo ? `https://sb-cse-gnitc-api.onrender.com/api/photo/${s.photo}` : 'No Photo',
             'Company': s.companies.join(', '),
             'Company Logo': 'No Logo',
             'Package (LPA)': s.maxPackage,
@@ -746,14 +746,14 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     students.forEach((s) => {
       // Use HTML width/height attributes for Word compatibility
       const photoCell = s.photo 
-        ? `<img src="http://localhost:3000/api/photo/${s.photo}" width="50" height="50" alt="${s.name}">`
+        ? `<img src="https://sb-cse-gnitc-api.onrender.com/api/photo/${s.photo}" width="50" height="50" alt="${s.name}">`
         : `<b style="font-size:16px;color:#6366f1;">${s.name?.charAt(0) || 'S'}</b>`;
       
       if (s.placements && s.placements.length > 0) {
         // One row per placement
         s.placements.forEach(p => {
           // Try stored logo first, then lookup by company name
-          let logoUrl = p.logo ? `http://localhost:3000/api/logos/${p.logo}` : this.getCompanyLogo(p.company);
+          let logoUrl = p.logo ? `https://sb-cse-gnitc-api.onrender.com/api/logos/${p.logo}` : this.getCompanyLogo(p.company);
           const logoCell = logoUrl 
             ? `<img src="${logoUrl}" width="40" height="40" alt="${p.company}">`
             : `<span style="color:#999;font-size:10px;">No Logo</span>`;
