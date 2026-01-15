@@ -1068,4 +1068,9 @@ app.get('/preview/word', requireAdmin, async (req, res) => {
   }
 });
 
+// 404 handler for undefined routes (prevents ENOENT errors)
+app.use((req, res) => {
+  res.status(404).json({ error: 'Not Found', message: 'The requested route does not exist' });
+});
+
 app.listen(PORT, () => console.log(`\n🚀 Server: http://localhost:${PORT}\n`));
