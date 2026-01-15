@@ -21,7 +21,7 @@ export interface LoginResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly API_URL = '/api';
+  private readonly API_URL = 'https://sb-cse-gnitc-api.onrender.com/api';
   
   // Signals for reactive state management
   currentUser = signal<User | null>(null);

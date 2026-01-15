@@ -68,7 +68,7 @@ export interface PlacementsResponse {
 })
 export class PlacementService {
   private http = inject(HttpClient);
-  private API_URL = '/api';
+  private API_URL = 'https://sb-cse-gnitc-api.onrender.com/api';
 
   // Cached data
   placements = signal<Student[]>([]);
