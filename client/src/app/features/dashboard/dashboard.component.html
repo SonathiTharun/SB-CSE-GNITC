@@ -1127,8 +1127,8 @@
             <tr *ngFor="let s of previewData(); let i = index" class="border-t border-slate-100 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/30">
               <td class="px-4 py-3 font-medium">{{ i + 1 }}</td>
               <td class="px-4 py-3 text-center">
-                <img *ngIf="s.photo" [src]="'/api/photo/' + s.photo" [alt]="s.name" [title]="s.name" [attr.aria-label]="s.name" class="w-10 h-10 rounded-lg object-cover mx-auto">
-                <div *ngIf="!s.photo" class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold mx-auto">{{ getInitial(s.name) }}</div>
+                <img *ngIf="s.photo" [src]="getStudentPhoto(s)" [alt]="s.name" [title]="s.name" [attr.aria-label]="s.name" class="w-10 h-10 rounded-lg object-cover mx-auto">
+                <div *ngIf="!s.photo" class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold mx-auto">{{ s.name?.charAt(0) || 'S' }}</div>
               </td>
               <td class="px-4 py-3">
                 <div class="font-semibold text-slate-900 dark:text-white">{{ s.name }}</div>
