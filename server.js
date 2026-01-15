@@ -73,6 +73,10 @@ const upload = multer({
 // Middleware
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true }));
+
+// Trust proxy for Render (required for secure cookies behind reverse proxy)
+app.set('trust proxy', 1);
+
 app.use(session({
   secret: process.env.SESSION_SECRET || 'placement-portal-secret-key-2025',
   resave: false,
