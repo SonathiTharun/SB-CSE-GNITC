@@ -12,6 +12,30 @@ const nodemailer = require('nodemailer');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// CORS configuration for production
+const allowedOrigins = [
+  'http://localhost:4200',
+  'https://gnitc-sb-placements.vercel.app',
+  /\.vercel\.app$/  // Allow all Vercel preview deployments
+];
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.some(allowed => 
+    allowed instanceof RegExp ? allowed.test(origin) : allowed === origin
+  )) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 // Health check endpoint for UptimeRobot (keeps Render free tier awake)
 app.get('/healthz', (req, res) => {
   res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
@@ -53,7 +77,12 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'placement-portal-secret-key-2025',
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: 24 * 60 * 60 * 1000 }
+  cookie: { 
+    maxAge: 24 * 60 * 60 * 1000,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+  }
 }));
 
 // Email Config
