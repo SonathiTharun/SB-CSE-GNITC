@@ -664,7 +664,14 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       );
     }
     
-    return company?.logo ? `https://sb-cse-gnitc-api.onrender.com/api/logos/${company.logo}` : null;
+    return company?.logo 
+      ? (company.logo.startsWith('http') ? company.logo : `https://sb-cse-gnitc-api.onrender.com/api/logos/${company.logo}`) 
+      : null;
+  }
+
+  getStudentPhoto(student: Student): string {
+    if (!student.photo) return '';
+    return student.photo.startsWith('http') ? student.photo : `https://sb-cse-gnitc-api.onrender.com/api/photo/${student.photo}`;
   }
 
   exportToExcel(filter: 'verified' | 'all' = 'all'): void {
@@ -681,24 +688,27 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         if (s.placements && s.placements.length > 0) {
           s.placements.forEach(p => {
             // Try stored logo first, then lookup by company name
-            const logoUrl = p.logo ? `https://sb-cse-gnitc-api.onrender.com/api/logos/${p.logo}` : this.getCompanyLogo(p.company);
+            const logoBase = p.logo ? (p.logo.startsWith('http') ? p.logo : `https://sb-cse-gnitc-api.onrender.com/api/logos/${p.logo}`) : this.getCompanyLogo(p.company);
+            const photoUrl = s.photo ? (s.photo.startsWith('http') ? s.photo : `https://sb-cse-gnitc-api.onrender.com/api/photo/${s.photo}`) : 'No Photo';
+            
             data.push({
               'S.No': sno++,
               'Student ID': s.studentId,
               'Student Name': s.name,
-              'Photo Link': s.photo ? `https://sb-cse-gnitc-api.onrender.com/api/photo/${s.photo}` : 'No Photo',
+              'Photo Link': photoUrl,
               'Company': p.company,
-              'Company Logo': logoUrl || 'No Logo',
+              'Company Logo': logoBase || 'No Logo',
               'Package (LPA)': p.salary,
             });
           });
         } else {
           // Fallback for students without detailed placements
+          const photoUrl = s.photo ? (s.photo.startsWith('http') ? s.photo : `https://sb-cse-gnitc-api.onrender.com/api/photo/${s.photo}`) : 'No Photo';
           data.push({
             'S.No': sno++,
             'Student ID': s.studentId,
             'Student Name': s.name,
-            'Photo Link': s.photo ? `https://sb-cse-gnitc-api.onrender.com/api/photo/${s.photo}` : 'No Photo',
+            'Photo Link': photoUrl,
             'Company': s.companies.join(', '),
             'Company Logo': 'No Logo',
             'Package (LPA)': s.maxPackage,
@@ -745,8 +755,13 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     let sno = 1;
     students.forEach((s) => {
       // Use HTML width/height attributes for Word compatibility
+      let photoSrc = '';
+      if (s.photo) {
+          photoSrc = s.photo.startsWith('http') ? s.photo : `https://sb-cse-gnitc-api.onrender.com/api/photo/${s.photo}`;
+      }
+      
       const photoCell = s.photo 
-        ? `<img src="https://sb-cse-gnitc-api.onrender.com/api/photo/${s.photo}" width="50" height="50" alt="${s.name}">`
+        ? `<img src="${photoSrc}" width="50" height="50" alt="${s.name}">`
         : `<b style="font-size:16px;color:#6366f1;">${s.name?.charAt(0) || 'S'}</b>`;
       
       if (s.placements && s.placements.length > 0) {

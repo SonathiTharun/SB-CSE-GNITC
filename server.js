@@ -8,6 +8,33 @@ const fs = require('fs');
 const XLSX = require('xlsx');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
+const cloudinary = require('cloudinary').v2;
+
+// Cloudinary Configuration
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+// Helper: Upload buffer to Cloudinary
+async function uploadToCloudinary(buffer, folder, publicId) {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      { 
+        folder: folder,
+        public_id: publicId,
+        overwrite: true,
+        resource_type: 'image'
+      },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      }
+    );
+    uploadStream.end(buffer);
+  });
+}
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -41,22 +68,8 @@ app.get('/healthz', (req, res) => {
   res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// File upload config (max 2MB)
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, __dirname),
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    // If uploading company logo (admin), use timestamp or original name
-    if (file.fieldname === 'logo') {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, `company-${uniqueSuffix}${ext}`);
-    } else {
-        // Default (student profile photo): Use Student ID
-        const userId = req.session?.user?.id || 'unknown';
-        cb(null, `${userId}${ext}`);
-    }
-  }
-});
+// File upload config (max 2MB) - Use memory storage for Cloudinary
+const storage = multer.memoryStorage();
 const upload = multer({ 
   storage,
   limits: { fileSize: 2 * 1024 * 1024 }, // 2MB limit
@@ -623,21 +636,29 @@ app.post('/api/upload-photo', requireStudent, upload.single('photo'), async (req
       return res.status(400).json({ error: 'No file uploaded' });
     }
     
-    const photoPath = req.file.filename;
+    // Upload to Cloudinary
+    const result = await uploadToCloudinary(
+        req.file.buffer, 
+        'student_photos', 
+        req.session.user.id // Use student ID as public_id
+    );
+    
+    const photoUrl = result.secure_url;
     
     // Update student record
     await Student.findOneAndUpdate(
       { id: { $regex: new RegExp(`^${req.session.user.id}$`, 'i') } },
-      { photo: photoPath, verificationStatus: 'pending' }
+      { photo: photoUrl, verificationStatus: 'pending' }
     );
     
-    await logActivity(req, 'UPLOAD_PHOTO', 'Student uploaded new photo');
+    await logActivity(req, 'UPLOAD_PHOTO', 'Student uploaded new photo (Cloudinary)');
     
     // Update session
-    req.session.user.photo = photoPath;
+    req.session.user.photo = photoUrl;
     
-    res.json({ success: true, photo: photoPath });
+    res.json({ success: true, photo: photoUrl });
   } catch (error) {
+    console.error('Upload Error:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -905,33 +926,32 @@ app.get('/api/companies', requireLogin, async (req, res) => {
 });
 
 // Add new Company (Admin)
+// Add new Company (Admin)
 app.post('/api/companies', requireAdmin, upload.single('logo'), async (req, res) => {
     try {
         const { name } = req.body;
         if (!name) return res.status(400).json({ error: 'Company Name is required' });
         
-        const logoPath = req.file ? req.file.filename : '';
+        let logoUrl = '';
         
-        // Move file to 'logos' directory if uploaded to root
-        if (logoPath) {
-            const oldPath = path.join(__dirname, logoPath);
-            const newPath = path.join(__dirname, 'logos', logoPath);
-            if (fs.existsSync(oldPath)) {
-                fs.renameSync(oldPath, newPath);
-            }
+        // Upload to Cloudinary if file exists
+        if (req.file) {
+            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+            const result = await uploadToCloudinary(
+                req.file.buffer, 
+                'company_logos', 
+                `company-${uniqueSuffix}`
+            );
+            logoUrl = result.secure_url;
         }
 
-        const newCompany = new Company({ name, logo: logoPath });
+        const newCompany = new Company({ name, logo: logoUrl });
         await newCompany.save();
         
         await logActivity(req, 'ADD_COMPANY', `Added company: ${name}`);
         res.json({ success: true, company: newCompany });
     } catch (e) { 
-        // Cleanup file if DB save fails
-        if (req.file) {
-             try { fs.unlinkSync(path.join(__dirname, req.file.filename)); } catch(err){}
-             try { fs.unlinkSync(path.join(__dirname, 'logos', req.file.filename)); } catch(err){}
-        }
+        console.error('Company Add Error:', e);
         res.status(500).json({ error: e.message }); 
     }
 });

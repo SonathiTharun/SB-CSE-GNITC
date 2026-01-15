@@ -561,7 +561,7 @@
                       >
                         <img
                           *ngIf="student.photo"
-                          [src]="'/api/photo/' + student.photo"
+                          [src]="getStudentPhoto(student)"
                           [alt]="student.name"
                           [title]="student.name"
                           [attr.aria-label]="student.name"
