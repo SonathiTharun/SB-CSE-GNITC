@@ -10,6 +10,11 @@ const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const cloudinary = require('cloudinary').v2;
 
+// Auto-detect production environment (Render sets RENDER=true)
+if (process.env.RENDER) {
+  process.env.NODE_ENV = 'production';
+}
+
 // Cloudinary Configuration
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
