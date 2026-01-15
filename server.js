@@ -606,7 +606,9 @@ app.post('/api/placements', requireStudent, async (req, res) => {
             <p><a href="http://localhost:3000/login">Login to Verify</a></p>
         </div>
     `;
-    await sendEmail(process.env.EMAIL_USER, '🔔 New Submission - GNITC Special Batch', alertHtml);
+    // Fire-and-forget: don't block API response waiting for email
+    sendEmail(process.env.EMAIL_USER, '🔔 New Submission - GNITC Special Batch', alertHtml)
+      .catch(e => console.error('Email send failed:', e.message));
 
     await logActivity(req, 'ADD_PLACEMENT', `Added placement at ${company}`);
     return res.json({ success: true, placement: newPlacement });
@@ -749,7 +751,9 @@ app.post('/api/students/create', requireAdmin, async (req, res) => {
             <p style="color: #475569;">Best Regards,<br>GNITC Special Batch Team</p>
         </div>
     </div>`;
-    await sendEmail(`${id.toLowerCase()}@gniindia.org`, '🌟 Exclusive Access: GNITC Special Batch Portal', emailHtml);
+    // Fire-and-forget: don't block API response waiting for email
+    sendEmail(`${id.toLowerCase()}@gniindia.org`, '🌟 Exclusive Access: GNITC Special Batch Portal', emailHtml)
+      .catch(e => console.error('Welcome email failed:', e.message));
     
     res.json({ success: true });
   } catch (error) {
@@ -801,7 +805,9 @@ app.delete('/api/students/:id', requireAdmin, async (req, res) => {
                 <p>Your account (ID: ${id}) has been removed from the GNITC Special Batch Portal.</p>
                 <p>If you believe this is an error, please contact the placement cell.</p>
             </div>`;
-        await sendEmail(`${id.toLowerCase()}@gniindia.org`, 'Account Deleted - GNITC Special Batch', emailHtml);
+        // Fire-and-forget: don't block response
+        sendEmail(`${id.toLowerCase()}@gniindia.org`, 'Account Deleted - GNITC Special Batch', emailHtml)
+          .catch(e => console.error('Deletion email failed:', e.message));
         
         await logActivity(req, 'DELETE_STUDENT', `Deleted student: ${id}`);
         res.json({ success: true });
@@ -875,7 +881,9 @@ app.post('/api/admin/verify', requireAdmin, async (req, res) => {
             await createNotification(student.id, title, message, status === 'verified' ? 'success' : 'warning');
             const emailTo = `${student.id.toLowerCase()}@gniindia.org`;
             console.log(`[VERIFY] Sending email to ${emailTo}`);
-            await sendEmail(emailTo, title, emailHtml);
+            // Fire-and-forget: don't block verification response
+            sendEmail(emailTo, title, emailHtml)
+              .catch(e => console.error('Verification email failed:', e.message));
         } else {
              console.error(`[VERIFY] Student NOT FOUND for placement ${p._id}, studentId: ${p.studentId}`);
         }

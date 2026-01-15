@@ -101,7 +101,7 @@
             <div class="relative mb-4">
               <!-- Photo or Initial -->
               <div class="w-32 h-32 rounded-full border-4 border-white dark:border-slate-800 shadow-lg overflow-hidden bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-4xl font-bold text-slate-400 group-hover:scale-105 transition-transform duration-300">
-                <img *ngIf="student()?.photo" [src]="'/api/photo/' + student()?.photo" [alt]="student()?.name || 'Student Photo'" [title]="student()?.name || 'Student Photo'" class="w-full h-full object-cover">
+                <img *ngIf="student()?.photo" [src]="getPhotoUrl(student()?.photo)" [alt]="student()?.name || 'Student Photo'" [title]="student()?.name || 'Student Photo'" class="w-full h-full object-cover">
                 <span *ngIf="!student()?.photo">{{ getInitial(student()?.name) }}</span>
               </div>
               

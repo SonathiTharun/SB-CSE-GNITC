@@ -106,6 +106,18 @@ export class StudentComponent implements OnInit {
     // Poll notifications every 30s
     setInterval(() => this.placementService.fetchNotifications(), 30000);
     
+    // Initialize AudioContext on first user interaction (required by browsers)
+    const initAudio = () => {
+      if (!this.audioContext) {
+        this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      }
+      if (this.audioContext.state === 'suspended') {
+        this.audioContext.resume();
+      }
+      document.removeEventListener('click', initAudio);
+    };
+    document.addEventListener('click', initAudio);
+
     // Close dropdown on click outside
     document.addEventListener('click', () => {
       this.showNotifications.set(false);
@@ -229,5 +241,12 @@ export class StudentComponent implements OnInit {
 
   getInitial(name: string | undefined): string {
     return name ? name.charAt(0).toUpperCase() : 'S';
+  }
+
+  getPhotoUrl(photo: string | undefined): string {
+    if (!photo) return '';
+    return photo.startsWith('http') 
+      ? photo 
+      : `https://sb-cse-gnitc-api.onrender.com/api/photo/${photo}`;
   }
 }

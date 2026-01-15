@@ -226,7 +226,19 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    // Charts will be initialized after data loads
+    // Initialize AudioContext on first user interaction (required by browsers)
+    const initAudio = () => {
+      if (!this.audioContext) {
+        this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      }
+      if (this.audioContext.state === 'suspended') {
+        this.audioContext.resume();
+      }
+      document.removeEventListener('click', initAudio);
+    };
+    document.addEventListener('click', initAudio);
+
+    // Close menus on click outside
     document.addEventListener('click', () => {
       this.showActionMenu.set(null);
       this.showNotifications.set(false);
