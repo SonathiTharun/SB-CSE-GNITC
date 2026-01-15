@@ -107,7 +107,11 @@ app.use(session({
   }
 }));
 
-// Email Config
+// Email Config - Using Resend (works better on Render than Gmail SMTP)
+const { Resend } = require('resend');
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+
+// Fallback Gmail transporter (for local dev)
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -116,16 +120,28 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-// Helper: Send Email
+// Helper: Send Email (uses Resend in production, Gmail locally)
 async function sendEmail(to, subject, html) {
     try {
-        await transporter.sendMail({
-            from: `"GNITC Special Batch" <${process.env.EMAIL_USER}>`,
-            to,
-            subject,
-            html
-        });
-        console.log(`📧 Email sent to ${to}: ${subject}`);
+        if (resend && process.env.NODE_ENV === 'production') {
+            // Use Resend in production
+            await resend.emails.send({
+                from: 'GNITC Placement Portal <onboarding@resend.dev>',
+                to: [to],
+                subject: subject,
+                html: html
+            });
+            console.log(`📧 [Resend] Email sent to ${to}: ${subject}`);
+        } else {
+            // Fallback to Gmail for local development
+            await transporter.sendMail({
+                from: `"GNITC Special Batch" <${process.env.EMAIL_USER}>`,
+                to,
+                subject,
+                html
+            });
+            console.log(`📧 [Gmail] Email sent to ${to}: ${subject}`);
+        }
     } catch (e) {
         console.error(`❌ Email error: ${e.message}`);
     }
@@ -1061,8 +1077,18 @@ async function fetchImageToBase64(imagePathOrUrl) {
     if (fs.existsSync(localPath)) {
       return fs.readFileSync(localPath).toString('base64');
     }
-    return '';
+    return 'image/png';
   }
+  return '';
+}
+
+// Helper: Normalize company name for fuzzy matching
+function normalizeCompanyName(name) {
+  if (!name) return '';
+  return name.toLowerCase()
+    .replace(/\s*(ltd|limited|pvt|private|inc|llp|technologies|tech|solutions)\s*/gi, '')
+    .replace(/[^a-z0-9]/gi, '')
+    .trim();
 }
 
 app.get('/download/word', requireAdmin, async (req, res) => {
@@ -1083,7 +1109,7 @@ app.get('/download/word', requireAdmin, async (req, res) => {
     const companies = await Company.find({});
     const companyLogoMap = {};
     companies.forEach(c => {
-      companyLogoMap[c.name.toLowerCase()] = c.logo;
+      companyLogoMap[normalizeCompanyName(c.name)] = c.logo;
     });
     
     // Process rows concurrently for speed
@@ -1099,7 +1125,7 @@ app.get('/download/word', requireAdmin, async (req, res) => {
       let logoUrl = s.logo;
       if (!logoUrl || (!logoUrl.startsWith('http') && !logoUrl)) {
         // Look up from company collection
-        const companyName = s.company?.toLowerCase();
+        const companyName = normalizeCompanyName(s.company);
         if (companyName && companyLogoMap[companyName]) {
           logoUrl = companyLogoMap[companyName];
         }
@@ -1139,7 +1165,7 @@ app.get('/preview/word', requireAdmin, async (req, res) => {
     const companies = await Company.find({});
     const companyLogoMap = {};
     companies.forEach(c => {
-      companyLogoMap[c.name.toLowerCase()] = c.logo;
+      companyLogoMap[normalizeCompanyName(c.name)] = c.logo;
     });
     
     const rowPromises = all.map(async (s, i) => {
@@ -1153,7 +1179,7 @@ app.get('/preview/word', requireAdmin, async (req, res) => {
       // Get logo - first try student's logo, then look up from company
       let logoUrl = s.logo;
       if (!logoUrl || !logoUrl.startsWith('http')) {
-        const companyName = s.company?.toLowerCase();
+        const companyName = normalizeCompanyName(s.company);
         if (companyName && companyLogoMap[companyName]) {
           logoUrl = companyLogoMap[companyName];
         }

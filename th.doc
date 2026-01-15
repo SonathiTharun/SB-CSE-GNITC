@@ -1,0 +1,465 @@
+﻿
+<!DOCTYPE html>
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word">
+<head>
+<meta charset="utf-8">
+<title>CSE Placement Report</title>
+<!--[if gte mso 9]>
+<xml>
+<w:WordDocument>
+<w:View>Print</w:View>
+<w:Zoom>100</w:Zoom>
+</w:WordDocument>
+</xml>
+<![endif]-->
+<style>
+  @page { size: landscape; margin: 0.5in; }
+  body { font-family: Arial, sans-serif; font-size: 12px; }
+  h1 { color: #1e3a8a; font-size: 20px; margin: 0; text-align: center; }
+  h2 { color: #4338ca; font-size: 14px; margin: 5px 0; text-align: center; }
+  h3 { color: #6366f1; font-size: 12px; margin: 5px 0; text-align: center; }
+  .date { color: #666; font-size: 11px; text-align: center; margin-bottom: 20px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+  th { background-color: #1e3a8a; color: white; padding: 10px; text-align: left; font-size: 11px; border: 1px solid #1e3a8a; }
+  td { padding: 8px; border: 1px solid #ccc; vertical-align: middle; }
+  .stats-table { margin: 15px 0; }
+  .stats-table td { text-align: center; padding: 15px; background: #f0f0ff; border: none; }
+  .stat-value { font-size: 24px; font-weight: bold; color: #1e3a8a; }
+  .stat-label { font-size: 10px; color: #666; }
+  .footer { text-align: center; margin-top: 30px; font-size: 10px; color: #666; border-top: 1px solid #ccc; padding-top: 15px; }
+</style>
+</head>
+<body>
+<h1>GURU NANAK INSTITUTIONS TECHNICAL CAMPUS</h1>
+<h2>Department of Computer Science & Engineering</h2>
+<h3>Verified Placements Report</h3>
+<p class="date">Generated on: 15 January 2026</p>
+
+<table class="stats-table">
+  <tr>
+    <td><div class="stat-value">27</div><div class="stat-label">Students</div></td>
+    <td><div class="stat-value">33</div><div class="stat-label">Verified</div></td>
+    <td><div class="stat-value">21</div><div class="stat-label">Companies</div></td>
+    <td><div class="stat-value">5.92</div><div class="stat-label">Avg Package (LPA)</div></td>
+  </tr>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width:30px;text-align:center;">#</th>
+      <th style="width:60px;text-align:center;">Photo</th>
+      <th style="width:160px;">Student Details</th>
+      <th style="width:50px;text-align:center;">Logo</th>
+      <th>Company</th>
+      <th style="width:80px;text-align:center;">Package</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">1</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479793/student_photos/22WJ8A05FM.jpg" width="50" height="50" alt="MOHAMMED MAHMOOD"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>MOHAMMED MAHMOOD</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05FM</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/Tutorac.jfif" width="40" height="40" alt="Tutorac"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>Tutorac</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">4 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">2</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479802/student_photos/22WJ8A05DW.jpg" width="50" height="50" alt="B V THARUN TEJA REDDY"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>B V THARUN TEJA REDDY</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05DW</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/SprintM Tech.png" width="40" height="40" alt="SprintM Technologies"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>SprintM Technologies</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">6 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">3</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479787/student_photos/22WJ8A0560.jpg" width="50" height="50" alt="Harshita T"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>Harshita T</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A0560</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/TURTIL.jfif" width="40" height="40" alt="TURTIL"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>TURTIL</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">6 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">4</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479787/student_photos/22WJ8A0560.jpg" width="50" height="50" alt="Harshita T"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>Harshita T</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A0560</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/RealPage India.jpg" width="40" height="40" alt="RealPage India Private Limited"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>RealPage India Private Limited</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">10 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">5</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479790/student_photos/22WJ8A05P3.jpg" width="50" height="50" alt="S Chiranjeevi Sai pranav"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>S Chiranjeevi Sai pranav</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05P3</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/MS square.jfif" width="40" height="40" alt="MSsquare technologies"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>MSsquare technologies</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">6 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">6</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479790/student_photos/22WJ8A05P3.jpg" width="50" height="50" alt="S Chiranjeevi Sai pranav"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>S Chiranjeevi Sai pranav</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05P3</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/LTI mindtree.png" width="40" height="40" alt="LTIMindtree"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>LTIMindtree</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">4.05 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">7</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479813/student_photos/22WJ8A05TM.jpg" width="50" height="50" alt="S.Shiva Shankar Reddy"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>S.Shiva Shankar Reddy</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05TM</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/dexterity.jpeg" width="40" height="40" alt="Dexterity Edtech Pvt Ltd."></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>Dexterity Edtech Pvt Ltd.</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">6 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">8</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479795/student_photos/22WJ8A05RD.jpg" width="50" height="50" alt="JAPATHI ANUDEEP"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>JAPATHI ANUDEEP</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05RD</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/Vijay Software.jpeg" width="40" height="40" alt="Vijay Software Solutions"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>Vijay Software Solutions</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">5 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">9</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479816/student_photos/22WJ8A05E4.jpg" width="50" height="50" alt="CHINTADA KEERTHI"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>CHINTADA KEERTHI</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05E4</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/RealPage India.jpg" width="40" height="40" alt="RealPage India Private Limited"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>RealPage India Private Limited</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">10 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">10</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479814/student_photos/22WJ8A05HM.jpg" width="50" height="50" alt="KOLANAKUDURU VENKATA SAI CHANDRA SRIVALLI"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>KOLANAKUDURU VENKATA SAI CHANDRA SRIVALLI</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05HM</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/RealPage India.jpg" width="40" height="40" alt="RealPage India Private Limited"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>RealPage India Private Limited</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">10 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">11</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479778/student_photos/22WJ8A05MW.jpg" width="50" height="50" alt="CHITTEDI SNEHITHA"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>CHITTEDI SNEHITHA</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05MW</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/RealPage India.jpg" width="40" height="40" alt="RealPage India Private Limited"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>RealPage India Private Limited</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">10 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">12</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479796/student_photos/22WJ8A05QC.jpg" width="50" height="50" alt="VANJAKU RAJ KUMAR"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>VANJAKU RAJ KUMAR</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05QC</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/RealPage India.jpg" width="40" height="40" alt="RealPage India Private Limited"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>RealPage India Private Limited</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">10 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">13</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479796/student_photos/22WJ8A05QC.jpg" width="50" height="50" alt="VANJAKU RAJ KUMAR"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>VANJAKU RAJ KUMAR</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05QC</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/HCL tech.jpeg" width="40" height="40" alt="HCLTech"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>HCLTech</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">4.5 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">14</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479789/student_photos/22WJ8A05CG.jpg" width="50" height="50" alt="ERRABOTHU VIKAS REDDY"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>ERRABOTHU VIKAS REDDY</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05CG</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/grad guru.png" width="40" height="40" alt="Grad Guru"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>Grad Guru</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">6 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">15</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479789/student_photos/22WJ8A05CG.jpg" width="50" height="50" alt="ERRABOTHU VIKAS REDDY"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>ERRABOTHU VIKAS REDDY</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05CG</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/deloite.png" width="40" height="40" alt="Deloitte"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>Deloitte</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">4.75 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">16</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479771/student_photos/22WJ8A05Y2.jpg" width="50" height="50" alt="Boyapally Poojitha"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>Boyapally Poojitha</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05Y2</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/Mu-Sigma.jpg" width="40" height="40" alt="Mu Sigma"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>Mu Sigma</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">40 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">17</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479775/student_photos/22WJ8A05DY.png" width="50" height="50" alt="BADDAM DIMPUL"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>BADDAM DIMPUL</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05DY</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/modak analtics.png" width="40" height="40" alt="Modak Analytics LLP"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>Modak Analytics LLP</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">4 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">18</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479775/student_photos/22WJ8A05DY.png" width="50" height="50" alt="BADDAM DIMPUL"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>BADDAM DIMPUL</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05DY</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/LTI mindtree.png" width="40" height="40" alt="LTIMindtree"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>LTIMindtree</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">4.05 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">19</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479777/student_photos/22WJ8A05NF.jpg" width="50" height="50" alt="ILENI ANUDEEP REDDY"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>ILENI ANUDEEP REDDY</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05NF</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/Pandora R&D Labs.jfif" width="40" height="40" alt="Pandora R&D Labs Pvt Ltd."></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>Pandora R&D Labs Pvt Ltd.</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">3.6 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">20</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479777/student_photos/22WJ8A05NF.jpg" width="50" height="50" alt="ILENI ANUDEEP REDDY"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>ILENI ANUDEEP REDDY</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05NF</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/HCL tech.jpeg" width="40" height="40" alt="HCLTech"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>HCLTech</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">4.5 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">21</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479794/student_photos/22WJ8A0513.jpg" width="50" height="50" alt="CHEPURI ANIL SAI KRISHNA"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>CHEPURI ANIL SAI KRISHNA</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A0513</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/et creatives.png" width="40" height="40" alt="ET Creatives"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>ET Creatives</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">4 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">22</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479791/student_photos/22WJ8A05EK.jpg" width="50" height="50" alt="GOLCONDA SHASHANK REDDY"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>GOLCONDA SHASHANK REDDY</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05EK</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/LTI mindtree.png" width="40" height="40" alt="LTIMindtree"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>LTIMindtree</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">4.05 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">23</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479792/student_photos/22WJ8A05FY.jpg" width="50" height="50" alt="RAJYALAXMI KARNATI"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>RAJYALAXMI KARNATI</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05FY</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/LTI mindtree.png" width="40" height="40" alt="LTIMindtree"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>LTIMindtree</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">4.05 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">24</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479786/student_photos/22WJ8A05J8.jpg" width="50" height="50" alt="ALLAKA BHANU CHANDRA PRASAD"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>ALLAKA BHANU CHANDRA PRASAD</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05J8</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/LTI mindtree.png" width="40" height="40" alt="LTIMindtree"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>LTIMindtree</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">4.05 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">25</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479780/student_photos/22WJ8A05J9.jpg" width="50" height="50" alt="ANKITH KATARIA"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>ANKITH KATARIA</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05J9</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/LTI mindtree.png" width="40" height="40" alt="LTIMindtree"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>LTIMindtree</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">4.05 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">26</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479782/student_photos/22WJ8A05MN.jpg" width="50" height="50" alt="AILURI MOHITH REDDY"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>AILURI MOHITH REDDY</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05MN</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/LTI mindtree.png" width="40" height="40" alt="LTIMindtree"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>LTIMindtree</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">4.05 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">27</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479803/student_photos/22WJ8A05NT.jpg" width="50" height="50" alt="KORUKANTI VAESHNAVI"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>KORUKANTI VAESHNAVI</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05NT</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/LTI mindtree.png" width="40" height="40" alt="LTIMindtree"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>LTIMindtree</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">4.05 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">28</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479788/student_photos/22WJ8A05RB.jpg" width="50" height="50" alt="GUTHA HARSHITH KUMAR"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>GUTHA HARSHITH KUMAR</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05RB</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/LTI mindtree.png" width="40" height="40" alt="LTIMindtree"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>LTIMindtree</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">4.05 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">29</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479817/student_photos/22WJ8A05RL.jpg" width="50" height="50" alt="KELUTH RONITH AKSHAY"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>KELUTH RONITH AKSHAY</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05RL</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/LTI mindtree.png" width="40" height="40" alt="LTIMindtree"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>LTIMindtree</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">4.05 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">30</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479783/student_photos/22WJ8A05VU.jpg" width="50" height="50" alt="SURUGURI DEVIKA"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>SURUGURI DEVIKA</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05VU</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/LTI mindtree.png" width="40" height="40" alt="LTIMindtree"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>LTIMindtree</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">4.05 LPA</b></td>
+            </tr>
+          
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">31</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479812/student_photos/22WJ8A05MU.jpg" width="50" height="50" alt="Bobbala snigdha reddy"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>Bobbala snigdha reddy</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05MU</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://sb-cse-gnitc-api.onrender.com/api/logos/HCL tech.jpeg" width="40" height="40" alt="HCLTech"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>HCLTech</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">4.5 LPA</b></td>
+            </tr>
+          
+          <tr>
+            <td style="border:1px solid #ccc;padding:8px;text-align:center;">32</td>
+            <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><b style="font-size:16px;color:#6366f1;">S</b></td>
+            <td style="border:1px solid #ccc;padding:8px;">
+              <b>SONATHI THARUN KUMAR</b><br>
+              <span style="color:#666;font-size:11px;">22WJ8A05W3</span>
+            </td>
+            <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><span style="color:#999;">-</span></td>
+            <td style="border:1px solid #ccc;padding:8px;"></td>
+            <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">0 LPA</b></td>
+          </tr>
+        
+            <tr>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;">33</td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:60px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479818/student_photos/22WJ8A05W1.jpg" width="50" height="50" alt="SANDU BHAVANA"></td>
+              <td style="border:1px solid #ccc;padding:8px;">
+                <b>SANDU BHAVANA</b><br>
+                <span style="color:#666;font-size:11px;">22WJ8A05W1</span>
+              </td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;width:50px;"><img src="https://res.cloudinary.com/dobrgdxwt/image/upload/v1768479843/company_logos/company-CDK_GLOBAL.webp" width="40" height="40" alt="CDK GLOBAL"></td>
+              <td style="border:1px solid #ccc;padding:8px;"><b>CDK GLOBAL</b></td>
+              <td style="border:1px solid #ccc;padding:8px;text-align:center;"><b style="color:#059669;">6 LPA</b></td>
+            </tr>
+          
+  </tbody>
+</table>
+
+<div class="footer">
+  <b>GNITC Placement Portal</b> | Special Batch 2026<br>
+  This is an auto-generated report. For official use only.
+</div>
+</body>
+</html>
+    
