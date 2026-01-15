@@ -21,6 +21,7 @@ export interface LoginResponse {
   providedIn: 'root'
 })
 export class AuthService {
+  // Production Render URL
   private readonly API_URL = 'https://sb-cse-gnitc-api.onrender.com/api';
   
   // Signals for reactive state management
