@@ -10,7 +10,12 @@ const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+
+// Health check endpoint for UptimeRobot (keeps Render free tier awake)
+app.get('/healthz', (req, res) => {
+  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+});
 
 // File upload config (max 2MB)
 const storage = multer.diskStorage({
