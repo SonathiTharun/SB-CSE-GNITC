@@ -1079,6 +1079,13 @@ app.get('/download/word', requireAdmin, async (req, res) => {
     
     const allPlacements = [...students, ...newPlacements];
     
+    // Pre-fetch all companies for logo lookup
+    const companies = await Company.find({});
+    const companyLogoMap = {};
+    companies.forEach(c => {
+      companyLogoMap[c.name.toLowerCase()] = c.logo;
+    });
+    
     // Process rows concurrently for speed
     const rowPromises = allPlacements.map(async (s, i) => {
       let photoImg = '', logoImg = '';
@@ -1088,9 +1095,21 @@ app.get('/download/word', requireAdmin, async (req, res) => {
         photoImg = `<img src="data:image/jpeg;base64,${photoB64}" width="50" height="60">`;
       }
       
-      const logoB64 = await fetchImageToBase64(s.logo);
-      if (logoB64) {
-        logoImg = `<img src="data:image/jpeg;base64,${logoB64}" width="40" height="25">`;
+      // Get logo - first try student's logo, then look up from company
+      let logoUrl = s.logo;
+      if (!logoUrl || (!logoUrl.startsWith('http') && !logoUrl)) {
+        // Look up from company collection
+        const companyName = s.company?.toLowerCase();
+        if (companyName && companyLogoMap[companyName]) {
+          logoUrl = companyLogoMap[companyName];
+        }
+      }
+      
+      if (logoUrl) {
+        const logoB64 = await fetchImageToBase64(logoUrl);
+        if (logoB64) {
+          logoImg = `<img src="data:image/jpeg;base64,${logoB64}" width="40" height="25">`;
+        }
       }
 
       const studentId = s.studentId || s.id;
@@ -1116,6 +1135,13 @@ app.get('/preview/word', requireAdmin, async (req, res) => {
     const newPlacements = await Placement.find({ isOriginal: false });
     const all = [...students, ...newPlacements];
     
+    // Pre-fetch all companies for logo lookup
+    const companies = await Company.find({});
+    const companyLogoMap = {};
+    companies.forEach(c => {
+      companyLogoMap[c.name.toLowerCase()] = c.logo;
+    });
+    
     const rowPromises = all.map(async (s, i) => {
       let photo = '', logo = '';
       
@@ -1124,9 +1150,20 @@ app.get('/preview/word', requireAdmin, async (req, res) => {
         photo = `<img src="data:image/jpeg;base64,${photoB64}" width="55" height="70" style="border-radius:5px">`;
       }
       
-      const logoB64 = await fetchImageToBase64(s.logo);
-      if (logoB64) {
-        logo = `<img src="data:image/jpeg;base64,${logoB64}" width="45" height="30">`;
+      // Get logo - first try student's logo, then look up from company
+      let logoUrl = s.logo;
+      if (!logoUrl || !logoUrl.startsWith('http')) {
+        const companyName = s.company?.toLowerCase();
+        if (companyName && companyLogoMap[companyName]) {
+          logoUrl = companyLogoMap[companyName];
+        }
+      }
+      
+      if (logoUrl) {
+        const logoB64 = await fetchImageToBase64(logoUrl);
+        if (logoB64) {
+          logo = `<img src="data:image/jpeg;base64,${logoB64}" width="45" height="30">`;
+        }
       }
 
       const isNew = !s.sno;
