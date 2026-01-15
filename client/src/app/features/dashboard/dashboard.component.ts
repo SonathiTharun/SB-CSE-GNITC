@@ -18,6 +18,7 @@ import { ThemeService } from '../../core/services/theme.service';
 import {
   PlacementService,
   Student,
+  GroupedStudent,
 } from '../../core/services/placement.service';
 import { AuthService } from '../../core/services/auth.service';
 
@@ -669,7 +670,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       : null;
   }
 
-  getStudentPhoto(student: Student): string {
+  getStudentPhoto(student: Student | GroupedStudent): string {
     if (!student.photo) return '';
     return student.photo.startsWith('http') ? student.photo : `https://sb-cse-gnitc-api.onrender.com/api/photo/${student.photo}`;
   }
