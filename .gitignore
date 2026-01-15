@@ -19,11 +19,12 @@ logs/
 !/photos/.gitkeep
 /logos/*
 !/logos/.gitkeep
-*.jpg
-*.jpeg
-*.png
-!logo.png
-!favicon.ico
+
+# Ignore uploaded images in root, but allow client assets
+/*.jpg
+/*.jpeg
+/*.png
+!client/src/assets/**
 
 # Build
 dist/
