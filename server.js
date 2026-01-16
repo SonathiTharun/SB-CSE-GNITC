@@ -969,10 +969,9 @@ app.post('/api/admin/verify', requireAdmin, async (req, res) => {
 // Send reminder emails to all pending verification students
 app.post('/api/admin/send-pending-reminders', requireAdmin, async (req, res) => {
     try {
-        // Find all pending placements
+        // Find all pending placements (both original and student-submitted)
         const pendingPlacements = await Placement.find({ 
-            verificationStatus: 'pending',
-            isOriginal: false 
+            verificationStatus: 'pending'
         });
         
         if (pendingPlacements.length === 0) {
