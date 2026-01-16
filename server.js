@@ -79,11 +79,12 @@ const upload = multer({
   storage,
   limits: { fileSize: 2 * 1024 * 1024 }, // 2MB limit
   fileFilter: (req, file, cb) => {
-    const allowed = /\.(jpg|jpeg|png)$/i;
+    const allowed = /\.(jpg|jpeg|png|webp|jfif)$/i;
     if (allowed.test(path.extname(file.originalname))) {
       cb(null, true);
     } else {
-      cb(new Error('Only JPG, JPEG, PNG allowed'));
+      console.error(`❌ Rejected file upload: ${file.originalname} (Invalid extension)`);
+      cb(new Error(`Only JPG, JPEG, PNG, WEBP, JFIF allowed. Rejected: ${file.originalname}`));
     }
   }
 });

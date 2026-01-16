@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - GNITC Placement API</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            width: 100%;
+            max-width: 400px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .header h1 {
+            color: #1e40af; /* Blue-800 */
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        .header p {
+            color: #6b7280;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #374151;
+            font-weight: 500;
+        }
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            box-sizing: border-box; /* Important for padding */
+        }
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #2563eb; /* Blue-600 */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        button:hover {
+            background-color: #1d4ed8;
+        }
+        .error {
+            color: #dc2626;
+            margin-top: 1rem;
+            text-align: center;
+            font-size: 0.875rem;
+            display: none;
+        }
+        .link {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.875rem;
+        }
+        .link a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+        .link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="header">
+            <h1>GNITC Placement API</h1>
+            <p>Admin / Student Login</p>
+        </div>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">User ID</label>
+                <input type="text" id="username" name="username" placeholder="Enter ID (e.g. ADMIN001)" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter Password" required>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <div id="errorMessage" class="error"></div>
+        <div class="link">
+            <p>Looking for the main portal?</p>
+            <a href="https://gnitc-sb-placements.vercel.app/">Go to Vercel App &rarr;</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.style.display = 'none';
+            
+            const username = form.username.value;
+            const password = form.password.value;
+            
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    if (data.role === 'admin') {
+                        // Attempt to go to admin dashboard, or fallback
+                        // Since we don't know if /admin exists on this server, we try.
+                        // If it fails, the user will see 404, which confirms they should use Vercel.
+                        window.location.href = '/admin'; 
+                    } else {
+                        window.location.href = '/student';
+                    }
+                } else {
+                    errorDiv.textContent = data.message || 'Login failed';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (err) {
+                errorDiv.textContent = 'An error occurred. Please try again.';
+                errorDiv.style.display = 'block';
+                console.error(err);
+            }
+        });
+    </script>
+</body>
+</html>
