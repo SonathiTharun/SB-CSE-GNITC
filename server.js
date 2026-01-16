@@ -520,6 +520,18 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
+// Logout API
+app.post('/api/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Logout error:', err);
+      return res.status(500).json({ success: false });
+    }
+    res.clearCookie('connect.sid');
+    res.json({ success: true });
+  });
+});
+
 // Change Password API
 app.post('/api/change-password', requireStudent, async (req, res) => {
   try {
