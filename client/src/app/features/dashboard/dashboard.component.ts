@@ -627,7 +627,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sendingReminders.set(true);
     
     try {
-      const response = await fetch('/api/admin/send-pending-reminders', {
+      const response = await fetch('https://sb-cse-gnitc-api.onrender.com/api/admin/send-pending-reminders', {
         method: 'POST',
         credentials: 'include'
       });
