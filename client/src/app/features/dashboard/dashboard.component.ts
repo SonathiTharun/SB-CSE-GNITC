@@ -213,6 +213,20 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       console.error('Audio playback failed', e);
     }
   }
+  
+  cleanDuplicates(): void {
+    if (!confirm('This will find students with multiple placements for the same company and keep only the BEST one (Verified > Latest). Are you sure?')) return;
+    
+    this.placementService.removeDuplicates().subscribe({
+      next: (res) => {
+        if (res.success) {
+          alert(`✅ Cleanup Complete! Removed ${res.count} duplicate entries.`);
+          this.loadData();
+        }
+      },
+      error: () => alert('❌ Cleanup failed')
+    });
+  }
 
   confirmLogout() {
     this.showLogoutModal.set(true);

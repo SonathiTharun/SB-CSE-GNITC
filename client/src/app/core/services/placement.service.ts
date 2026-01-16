@@ -295,4 +295,11 @@ export class PlacementService {
   createStudent(data: { id: string; name: string }): Observable<any> {
     return this.http.post(`${this.API_URL}/students/create`, data);
   }
+
+  /**
+   * Clean up duplicate placements
+   */
+  removeDuplicates(): Observable<{ success: boolean; count: number }> {
+    return this.http.post<{ success: boolean; count: number }>(`${this.API_URL}/admin/remove-duplicates`, {});
+  }
 }

@@ -1243,6 +1243,88 @@ app.get('/api/logos', requireLogin, async (req, res) => {
   } catch (e) { res.json([]); }
 });
 
+// --- Duplicate Cleanup Route ---
+app.post('/api/admin/remove-duplicates', async (req, res) => {
+  if (!req.session.admin) return res.status(401).json({ error: 'Unauthorized' });
+  
+  try {
+    const students = await Student.find({}, '_id id name company verificationStatus logo salary updatedAt');
+    const placements = await Placement.find({}, '_id studentId name company verificationStatus logo salary updatedAt');
+    
+    // Combined pool with source tracking
+    const allRecords = [
+      ...students.map(s => ({ ...s.toObject(), type: 'original', uniqueId: s._id })),
+      ...placements.map(p => ({ ...p.toObject(), studentId: p.studentId, type: 'placement', uniqueId: p._id }))
+    ];
+
+    const grouped = {};
+    
+    // Group by StudentID + Company (normalized)
+    allRecords.forEach(record => {
+      const sId = record.studentId || record.id;
+      if (!sId || !record.company) return;
+      
+      const companyKey = normalizeCompanyName(record.company);
+      const key = `${sId.toLowerCase()}|${companyKey}`;
+      
+      if (!grouped[key]) grouped[key] = [];
+      grouped[key].push(record);
+    });
+
+    let removedCount = 0;
+    const removalPromises = [];
+
+    // Process groups
+    Object.values(grouped).forEach(group => {
+      if (group.length < 2) return;
+
+      // Sort priority:
+      // 1. Status: Verified > Pending > Rejected
+      // 2. UpdatedAt: Newest > Oldest
+      
+      const statusWeight = { 'verified': 3, 'pending': 2, 'rejected': 1 };
+      
+      group.sort((a, b) => {
+        const statusA = statusWeight[a.verificationStatus || 'verified'] || 0;
+        const statusB = statusWeight[b.verificationStatus || 'verified'] || 0;
+        
+        if (statusA !== statusB) return statusB - statusA; // Higher status first
+        
+        // Tie-breaker: Latest update wins
+        const timeA = new Date(a.updatedAt || 0).getTime();
+        const timeB = new Date(b.updatedAt || 0).getTime();
+        return timeB - timeA;
+      });
+
+      // Keep index 0, remove the rest
+      const toRemove = group.slice(1);
+      
+      toRemove.forEach(item => {
+        removedCount++;
+        if (item.type === 'placement') {
+          removalPromises.push(Placement.findByIdAndDelete(item.uniqueId));
+        } else {
+           // Clear redundant original record fields
+           removalPromises.push(Student.findByIdAndUpdate(item.uniqueId, { 
+             company: '', 
+             logo: '', 
+             salary: 0, 
+             verificationStatus: 'pending' 
+           }));
+        }
+      });
+    });
+
+    await Promise.all(removalPromises);
+    
+    res.json({ success: true, count: removedCount });
+
+  } catch (error) {
+    console.error('Cleanup error:', error);
+    res.status(500).json({ error: 'Failed to remove duplicates' });
+  }
+});
+
 // ==================== DOWNLOADS ====================
 app.get('/download/excel', requireAdmin, async (req, res) => {
   try {
