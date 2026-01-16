@@ -1093,8 +1093,9 @@ async function fetchImageToBase64(imagePathOrUrl) {
 function normalizeCompanyName(name) {
   if (!name) return '';
   return name.toLowerCase()
-    .replace(/\s*(ltd|limited|pvt|private|inc|llp|technologies|tech|solutions)\s*/gi, '')
-    .replace(/[^a-z0-9]/gi, '')
+    .replace(/\s+/g, '') // Remove ALL spaces first
+    .replace(/[^a-z0-9]/gi, '') // Remove special chars
+    .replace(/(technologies|tech|solutions|pvt|ltd|limited|private|inc|llp)$/gi, '') // Remove suffixes
     .trim();
 }
 
@@ -1128,15 +1129,19 @@ app.get('/download/word', requireAdmin, async (req, res) => {
         photoImg = `<img src="data:image/jpeg;base64,${photoB64}" width="50" height="60">`;
       }
       
-      // Get logo - first try student's logo, then look up from company
-      // Get logo - first try DB logo (url), then fallback to lookup
-      let logoUrl = s.logo;
-      if (!logoUrl || (logoUrl && !logoUrl.startsWith('http'))) {
-        // Look up from company collection
-        const companyName = normalizeCompanyName(s.company);
-        if (companyName && companyLogoMap[companyName]) {
-          logoUrl = companyLogoMap[companyName];
-        }
+      // Get logo - ALWAYS prefer Company collection (most up-to-date)
+      // Old placements may have broken local API URLs or local filenames
+      let logoUrl = '';
+      
+      // First try Company collection lookup (most reliable)
+      const companyName = normalizeCompanyName(s.company);
+      if (companyName && companyLogoMap[companyName]) {
+        logoUrl = companyLogoMap[companyName];
+      }
+      
+      // Fallback to stored logo ONLY if it's a valid Cloudinary URL
+      if (!logoUrl && s.logo && s.logo.includes('cloudinary.com')) {
+        logoUrl = s.logo;
       }
       
       if (logoUrl) {
@@ -1203,13 +1208,19 @@ app.get('/preview/word', requireAdmin, async (req, res) => {
         photo = `<img src="data:image/jpeg;base64,${photoB64}" width="55" height="70" style="border-radius:5px">`;
       }
       
-      // Get logo - first try student's logo, then look up from company
-      let logoUrl = s.logo;
-      if (!logoUrl || !logoUrl.startsWith('http')) {
-        const companyName = normalizeCompanyName(s.company);
-        if (companyName && companyLogoMap[companyName]) {
-          logoUrl = companyLogoMap[companyName];
-        }
+      // Get logo - ALWAYS prefer Company collection (most up-to-date)
+      // Old placements may have broken local API URLs or local filenames
+      let logoUrl = '';
+      
+      // First try Company collection lookup (most reliable)
+      const companyName = normalizeCompanyName(s.company);
+      if (companyName && companyLogoMap[companyName]) {
+        logoUrl = companyLogoMap[companyName];
+      }
+      
+      // Fallback to stored logo ONLY if it's a valid Cloudinary URL
+      if (!logoUrl && s.logo && s.logo.includes('cloudinary.com')) {
+        logoUrl = s.logo;
       }
       
       if (logoUrl) {

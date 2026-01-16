@@ -655,11 +655,12 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   getCompanyLogo(companyName: string): string | null {
     if (!companyName) return null;
     
-    // Normalize: lowercase, remove extra spaces, common variations
+    // Aggressive normalize: lowercase, remove ALL spaces, remove common suffixes
     const normalize = (name: string) => 
       name.toLowerCase()
-          .replace(/\s+/g, ' ')  // Multiple spaces to single
-          .replace(/[^\w\s]/g, '') // Remove special chars
+          .replace(/\s+/g, '')  // Remove ALL spaces
+          .replace(/[^a-z0-9]/g, '') // Remove special chars
+          .replace(/(technologies|tech|solutions|pvt|ltd|limited|private|inc|llp)$/g, '') // Remove suffixes
           .trim();
     
     const normalizedSearch = normalize(companyName);
@@ -669,17 +670,22 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       normalize(c.name) === normalizedSearch
     );
     
-    // If not found, try contains match
+    // If not found, try contains match (either direction)
     if (!company) {
-      company = this.companies().find(c => 
-        normalize(c.name).includes(normalizedSearch) || 
-        normalizedSearch.includes(normalize(c.name))
-      );
+      company = this.companies().find(c => {
+        const normalizedCompany = normalize(c.name);
+        return normalizedCompany.includes(normalizedSearch) || 
+               normalizedSearch.includes(normalizedCompany);
+      });
     }
     
-    return company?.logo 
-      ? (company.logo.startsWith('http') ? company.logo : `https://sb-cse-gnitc-api.onrender.com/api/logos/${company.logo}`) 
-      : null;
+    // Only return Cloudinary URLs (they are reliable)
+    // Local API URLs don't work on deployment
+    if (company?.logo && company.logo.includes('cloudinary.com')) {
+      return company.logo;
+    }
+    
+    return null;
   }
 
   getStudentPhoto(student: Student | GroupedStudent): string {
@@ -700,8 +706,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       students.forEach(s => {
         if (s.placements && s.placements.length > 0) {
           s.placements.forEach(p => {
-            // Try stored logo first, then lookup by company name
-            const logoBase = p.logo ? (p.logo.startsWith('http') ? p.logo : `https://sb-cse-gnitc-api.onrender.com/api/logos/${p.logo}`) : this.getCompanyLogo(p.company);
+            // ALWAYS prefer Company collection lookup (has Cloudinary URLs)
+            const logoBase = this.getCompanyLogo(p.company) || 
+              (p.logo && p.logo.includes('cloudinary.com') ? p.logo : null);
             const photoUrl = s.photo ? (s.photo.startsWith('http') ? s.photo : `https://sb-cse-gnitc-api.onrender.com/api/photo/${s.photo}`) : 'No Photo';
             
             data.push({
@@ -780,8 +787,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       if (s.placements && s.placements.length > 0) {
         // One row per placement
         s.placements.forEach(p => {
-          // Try stored logo first, then lookup by company name
-          let logoUrl = p.logo ? `https://sb-cse-gnitc-api.onrender.com/api/logos/${p.logo}` : this.getCompanyLogo(p.company);
+          // ALWAYS prefer Company collection lookup (has Cloudinary URLs)
+          // Only use stored logo if it's a valid Cloudinary URL
+          let logoUrl = this.getCompanyLogo(p.company) || 
+            (p.logo && p.logo.includes('cloudinary.com') ? p.logo : null);
           const logoCell = logoUrl 
             ? `<img src="${logoUrl}" width="40" height="40" alt="${p.company}">`
             : `<span style="color:#999;font-size:10px;">No Logo</span>`;

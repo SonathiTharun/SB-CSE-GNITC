@@ -199,9 +199,15 @@ export class StudentComponent implements OnInit {
     }
 
     this.isSubmitting.set(true);
+    
+    // Look up the company's logo from the companies list
+    const selectedCompany = this.companies().find(c => c.name === this.placementForm.company);
+    const companyLogo = selectedCompany?.logo || '';
+    
     this.placementService.submitPlacement({
       company: this.placementForm.company,
-      salary: this.placementForm.salary
+      salary: this.placementForm.salary,
+      logo: companyLogo
     }).subscribe({
       next: (res) => {
         this.showMessage('success', 'Placement submitted successfully!');
