@@ -268,11 +268,18 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     id: string,
     action: 'approve' | 'reject'
   ): void {
+    console.log(`[VERIFY] ${action} ${type} ${id}`); // Debug log
     this.placementService.verifyPlacement(type, id, action).subscribe({
       next: () => {
         this.loadData();
-        // Show simplified feedback
+        // Brief visual feedback
+        const message = action === 'approve' ? '✅ Placement approved!' : '❌ Placement rejected!';
+        alert(message);
       },
+      error: (err) => {
+        console.error('Verify failed:', err);
+        alert('❌ Action failed. Please try again.');
+      }
     });
   }
 

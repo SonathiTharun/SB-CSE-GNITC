@@ -715,10 +715,7 @@ app.put('/api/placements/:id', requireStudent, async (req, res) => {
       return res.status(404).json({ error: 'Placement not found' });
     }
     
-    // Cannot edit verified placements
-    if (placement.verificationStatus === 'verified') {
-      return res.status(400).json({ error: 'Cannot edit verified placements' });
-    }
+    // Any edit resets to pending for re-verification (no status restriction)
     
     // Check for duplicate if company changed
     if (company && company.toLowerCase() !== placement.company.toLowerCase()) {

@@ -45,6 +45,7 @@ export class StudentComponent implements OnInit {
   showEditModal = signal(false);
   editingPlacement = signal<Student | null>(null);
   editForm = { company: '', salary: null as number | null, logo: '' };
+  editPhotoFile: File | null = null;
   
   // Notification Sound System
   private audioContext: AudioContext | null = null;
@@ -258,7 +259,15 @@ export class StudentComponent implements OnInit {
       salary: placement.salary,
       logo: placement.logo || ''
     };
+    this.editPhotoFile = null; // Reset photo selection
     this.showEditModal.set(true);
+  }
+
+  onEditPhotoSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.editPhotoFile = file;
+    }
   }
 
   submitEdit(): void {
@@ -281,23 +290,38 @@ export class StudentComponent implements OnInit {
     this.isSubmitting.set(true);
     const selectedCompany = this.companies().find(c => c.name === this.editForm.company);
     
-    this.placementService.updatePlacement(p._id, {
-      company: this.editForm.company,
-      salary: this.editForm.salary!,
-      logo: selectedCompany?.logo || this.editForm.logo
-    }).subscribe({
-      next: () => {
-        this.showMessage('success', 'Placement updated! Sent for re-verification.');
-        this.showEditModal.set(false);
-        this.editingPlacement.set(null);
-        this.loadProfile();
-        this.isSubmitting.set(false);
-      },
-      error: (err) => {
-        this.showMessage('error', err.error?.error || 'Failed to update placement');
+    // Upload photo first if selected
+    const uploadAndUpdate = async () => {
+      try {
+        if (this.editPhotoFile) {
+          await this.placementService.uploadPhoto(this.editPhotoFile).toPromise();
+        }
+        
+        this.placementService.updatePlacement(p._id, {
+          company: this.editForm.company,
+          salary: this.editForm.salary!,
+          logo: selectedCompany?.logo || this.editForm.logo
+        }).subscribe({
+          next: () => {
+            this.showMessage('success', 'Placement updated! Sent for re-verification.');
+            this.showEditModal.set(false);
+            this.editingPlacement.set(null);
+            this.editPhotoFile = null;
+            this.loadProfile();
+            this.isSubmitting.set(false);
+          },
+          error: (err) => {
+            this.showMessage('error', err.error?.error || 'Failed to update placement');
+            this.isSubmitting.set(false);
+          }
+        });
+      } catch (err) {
+        this.showMessage('error', 'Failed to upload photo');
         this.isSubmitting.set(false);
       }
-    });
+    };
+    
+    uploadAndUpdate();
   }
 
   logout(): void {

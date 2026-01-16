@@ -641,20 +641,16 @@
                             class="flex gap-1"
                           >
                             <button
-                              (click)="
-                                verifyStudent('placement', p._id, 'approve')
-                              "
-                              class="p-1 hover:bg-emerald-100 text-emerald-600 rounded"
-                              title="Approve"
+                              (click)="$event.stopPropagation(); verifyStudent('placement', p._id, 'approve')"
+                              class="p-1.5 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 text-emerald-600 rounded-lg transition-colors"
+                              title="Approve this placement"
                             >
                               ✓
                             </button>
                             <button
-                              (click)="
-                                verifyStudent('placement', p._id, 'reject')
-                              "
-                              class="p-1 hover:bg-red-100 text-red-600 rounded"
-                              title="Reject"
+                              (click)="$event.stopPropagation(); verifyStudent('placement', p._id, 'reject')"
+                              class="p-1.5 hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 rounded-lg transition-colors"
+                              title="Reject this placement"
                             >
                               ✕
                             </button>
