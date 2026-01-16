@@ -1177,6 +1177,80 @@
       </div>
     </div>
   </div>
+  <!-- Review Duplicates Modal -->
+  <div *ngIf="showDuplicateModal()" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-700 flex flex-col my-4">
+      <!-- Header -->
+      <div class="flex items-center justify-between mb-4 pb-4 border-b border-slate-200 dark:border-slate-700">
+        <div>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <span class="text-rose-500">⚠️</span> Review Duplicates
+            </h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400">Found {{ duplicateGroups().length }} conflicts. Select which entry to <span class="font-bold text-emerald-600">KEEP</span> for each.</p>
+        </div>
+        <button (click)="showDuplicateModal.set(false)" class="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl">✕</button>
+      </div>
+
+      <!-- Conflicts List -->
+      <div class="flex-1 overflow-y-auto space-y-4 pr-2">
+        <div *ngFor="let group of duplicateGroups()" class="bg-slate-50 dark:bg-slate-900/50 rounded-xl p-4 border border-slate-200 dark:border-slate-700">
+            <div class="flex justify-between items-start mb-3">
+                <h4 class="font-bold text-slate-800 dark:text-white">
+                    {{ group.studentName }} 
+                    <span class="text-slate-400 font-normal text-sm ml-2">({{ group.studentId }})</span>
+                </h4>
+                <div class="px-3 py-1 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-full text-xs font-bold">
+                    {{ group.company }}
+                </div>
+            </div>
+
+            <div class="grid gap-3">
+                <label *ngFor="let rec of group.records" 
+                    class="relative flex items-center gap-4 p-3 rounded-lg border-2 cursor-pointer transition-all hover:bg-white dark:hover:bg-slate-800"
+                    [ngClass]="{
+                        'border-emerald-500 bg-emerald-50/50 dark:bg-emerald-900/10': group.selectedId === rec.uniqueId,
+                        'border-slate-200 dark:border-slate-700': group.selectedId !== rec.uniqueId
+                    }">
+                    <input type="radio" [name]="'group_' + group.studentId" [value]="rec.uniqueId" [(ngModel)]="group.selectedId" class="w-5 h-5 text-emerald-600 focus:ring-emerald-500">
+                    
+                    <div class="flex-1 flex flex-wrap gap-4 items-center">
+                        <!-- Status Badge -->
+                        <span [ngClass]="{
+                            'bg-emerald-100 text-emerald-700': rec.verificationStatus === 'verified',
+                            'bg-amber-100 text-amber-700': rec.verificationStatus === 'pending',
+                            'bg-red-100 text-red-700': rec.verificationStatus === 'rejected'
+                        }" class="px-2 py-0.5 rounded text-xs font-bold uppercase w-20 text-center">
+                            {{ rec.verificationStatus || 'verified' }}
+                        </span>
+
+                        <div class="text-sm font-medium text-slate-700 dark:text-slate-300 min-w-[80px]">
+                            {{ rec.salary }} LPA
+                        </div>
+
+                        <div class="text-xs text-slate-500 flex items-center gap-1">
+                            <span>🕒 {{ rec.updatedAt | date:'mediumDate' }}</span>
+                            <span *ngIf="rec.type === 'original'" class="px-1.5 py-0.5 bg-slate-200 dark:bg-slate-700 rounded text-[10px]">ORIGINAL</span>
+                        </div>
+                    </div>
+
+                    <div *ngIf="group.selectedId === rec.uniqueId" class="text-emerald-600 text-sm font-bold flex items-center gap-1">
+                        <span>KEEP</span> ✓
+                    </div>
+                </label>
+            </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700 flex justify-end gap-3">
+        <button (click)="showDuplicateModal.set(false)" class="px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-bold rounded-xl">Cancel</button>
+        <button (click)="resolveConflicts()" class="px-6 py-2 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl shadow-lg transition-all flex items-center gap-2">
+            <span>🗑️ Resolve & Delete Others</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Logout Confirmation Modal -->
   <div *ngIf="showLogoutModal()" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity animate-fade-in">
     <div class="bg-white dark:bg-slate-800 rounded-3xl p-8 max-w-sm w-full shadow-2xl scale-100 animate-pop-in border border-slate-100 dark:border-slate-700">

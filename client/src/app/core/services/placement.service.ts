@@ -297,9 +297,16 @@ export class PlacementService {
   }
 
   /**
-   * Clean up duplicate placements
+   * Scan for duplicates (Manual Review)
    */
-  removeDuplicates(): Observable<{ success: boolean; count: number }> {
-    return this.http.post<{ success: boolean; count: number }>(`${this.API_URL}/admin/remove-duplicates`, {});
+  scanDuplicates(): Observable<{ conflicts: any[] }> {
+    return this.http.get<{ conflicts: any[] }>(`${this.API_URL}/admin/duplicates`);
+  }
+
+  /**
+   * Resolve duplicates by deleting selected records
+   */
+  resolveDuplicates(resolutions: { id: string; type: string }[]): Observable<{ success: boolean; count: number }> {
+    return this.http.post<{ success: boolean; count: number }>(`${this.API_URL}/admin/duplicates/resolve`, { resolutions });
   }
 }

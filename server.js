@@ -1243,15 +1243,17 @@ app.get('/api/logos', requireLogin, async (req, res) => {
   } catch (e) { res.json([]); }
 });
 
-// --- Duplicate Cleanup Route ---
-app.post('/api/admin/remove-duplicates', async (req, res) => {
+// --- Duplicate Cleanup Routes ---
+
+// 1. Scan for duplicates
+app.get('/api/admin/duplicates', async (req, res) => {
   if (!req.session.admin) return res.status(401).json({ error: 'Unauthorized' });
-  
+
   try {
-    const students = await Student.find({}, '_id id name company verificationStatus logo salary updatedAt');
+    const students = await Student.find({}, '_id id name company verificationStatus logo salary updatedAt type');
     const placements = await Placement.find({}, '_id studentId name company verificationStatus logo salary updatedAt');
     
-    // Combined pool with source tracking
+    // Combined pool
     const allRecords = [
       ...students.map(s => ({ ...s.toObject(), type: 'original', uniqueId: s._id })),
       ...placements.map(p => ({ ...p.toObject(), studentId: p.studentId, type: 'placement', uniqueId: p._id }))
@@ -1259,7 +1261,7 @@ app.post('/api/admin/remove-duplicates', async (req, res) => {
 
     const grouped = {};
     
-    // Group by StudentID + Company (normalized)
+    // Group by StudentID + Company
     allRecords.forEach(record => {
       const sId = record.studentId || record.id;
       if (!sId || !record.company) return;
@@ -1271,58 +1273,75 @@ app.post('/api/admin/remove-duplicates', async (req, res) => {
       grouped[key].push(record);
     });
 
-    let removedCount = 0;
-    const removalPromises = [];
+    const conflicts = [];
 
-    // Process groups
-    Object.values(grouped).forEach(group => {
-      if (group.length < 2) return;
+    // Filter for duplicates
+    // Also include the "Group Name" (e.g. "John Doe - Google")
+    Object.keys(grouped).forEach(key => {
+        const group = grouped[key];
+        if (group.length > 1) {
+            // Sort nicely for the UI (Verified first, then latest)
+            const statusWeight = { 'verified': 3, 'pending': 2, 'rejected': 1 };
+            group.sort((a, b) => {
+                const sA = statusWeight[a.verificationStatus || 'verified'] || 0;
+                const sB = statusWeight[b.verificationStatus || 'verified'] || 0;
+                if (sA !== sB) return sB - sA;
+                return new Date(b.updatedAt || 0).getTime() - new Date(a.updatedAt || 0).getTime();
+            });
 
-      // Sort priority:
-      // 1. Status: Verified > Pending > Rejected
-      // 2. UpdatedAt: Newest > Oldest
-      
-      const statusWeight = { 'verified': 3, 'pending': 2, 'rejected': 1 };
-      
-      group.sort((a, b) => {
-        const statusA = statusWeight[a.verificationStatus || 'verified'] || 0;
-        const statusB = statusWeight[b.verificationStatus || 'verified'] || 0;
-        
-        if (statusA !== statusB) return statusB - statusA; // Higher status first
-        
-        // Tie-breaker: Latest update wins
-        const timeA = new Date(a.updatedAt || 0).getTime();
-        const timeB = new Date(b.updatedAt || 0).getTime();
-        return timeB - timeA;
-      });
-
-      // Keep index 0, remove the rest
-      const toRemove = group.slice(1);
-      
-      toRemove.forEach(item => {
-        removedCount++;
-        if (item.type === 'placement') {
-          removalPromises.push(Placement.findByIdAndDelete(item.uniqueId));
-        } else {
-           // Clear redundant original record fields
-           removalPromises.push(Student.findByIdAndUpdate(item.uniqueId, { 
-             company: '', 
-             logo: '', 
-             salary: 0, 
-             verificationStatus: 'pending' 
-           }));
+            conflicts.push({
+                studentName: group[0].name,
+                company: group[0].company,
+                studentId: group[0].studentId || group[0].id,
+                records: group
+            });
         }
-      });
     });
 
-    await Promise.all(removalPromises);
-    
-    res.json({ success: true, count: removedCount });
+    res.json({ conflicts });
 
   } catch (error) {
-    console.error('Cleanup error:', error);
-    res.status(500).json({ error: 'Failed to remove duplicates' });
+    console.error('Scan error:', error);
+    res.status(500).json({ error: 'Failed to scan duplicates' });
   }
+});
+
+// 2. Resolve duplicates
+app.post('/api/admin/duplicates/resolve', async (req, res) => {
+    if (!req.session.admin) return res.status(401).json({ error: 'Unauthorized' });
+
+    const { resolutions } = req.body; // Array of IDs to delete
+    if (!resolutions || !Array.isArray(resolutions)) return res.status(400).json({ error: 'Invalid data' });
+
+    try {
+        let deletedCount = 0;
+        const promises = [];
+
+        // Resolutions is just a flat list of ID+Type to remove? 
+        // Or structured? Let's assume frontend sends a flat list of items to REMOVE.
+        // Input Example: [ { id: '...', type: 'placement' }, { id: '...', type: 'original' } ]
+        
+        for (const item of resolutions) {
+            if (item.type === 'placement') {
+                promises.push(Placement.findByIdAndDelete(item.id).then(() => deletedCount++));
+            } else if (item.type === 'original') {
+                // Soft delete placement data from original student
+                promises.push(Student.findByIdAndUpdate(item.id, {
+                    company: '',
+                    logo: '',
+                    salary: 0,
+                    verificationStatus: 'pending' // Reset to clean state
+                }).then(() => deletedCount++));
+            }
+        }
+
+        await Promise.all(promises);
+        res.json({ success: true, count: deletedCount });
+
+    } catch (e) {
+        console.error('Resolve error:', e);
+        res.status(500).json({ error: 'Resolution failed' });
+    }
 });
 
 // ==================== DOWNLOADS ====================

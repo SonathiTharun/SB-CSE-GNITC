@@ -94,6 +94,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   // Modal States
   showCreateStudentModal = signal(false);
   showCompanyModal = signal(false);
+  showDuplicateModal = signal(false); // New modal
+  duplicateGroups = signal<any[]>([]); // Data for modal
   showActionMenu = signal<string | null>(null); // Student ID
   showNotifications = signal(false);
   showLogoutModal = signal(false);
@@ -215,16 +217,57 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   
   cleanDuplicates(): void {
-    if (!confirm('This will find students with multiple placements for the same company and keep only the BEST one (Verified > Latest). Are you sure?')) return;
-    
-    this.placementService.removeDuplicates().subscribe({
+    // Phase 1: Scan
+    this.placementService.scanDuplicates().subscribe({
       next: (res) => {
-        if (res.success) {
-          alert(`✅ Cleanup Complete! Removed ${res.count} duplicate entries.`);
-          this.loadData();
+        if (res.conflicts.length === 0) {
+          alert('✅ No duplicates found!');
+          return;
         }
+        // Initialize groups with 'keep' selection (default to first/best)
+        res.conflicts.forEach(group => {
+            group.selectedId = group.records[0].uniqueId; // Default logic applied by backend
+        });
+        
+        this.duplicateGroups.set(res.conflicts);
+        this.showDuplicateModal.set(true);
       },
-      error: () => alert('❌ Cleanup failed')
+      error: () => alert('❌ Failed to scan for duplicates')
+    });
+  }
+
+  resolveConflicts(): void {
+    const resolutions: { id: string, type: string }[] = [];
+    
+    // Iterate user choices
+    this.duplicateGroups().forEach(group => {
+        // Find the one to keep
+        const keepId = group.selectedId;
+        
+        // Mark all OTHERS for deletion
+        group.records.forEach((rec: any) => {
+            if (rec.uniqueId !== keepId) {
+                resolutions.push({ id: rec.uniqueId, type: rec.type });
+            }
+        });
+    });
+
+    if (resolutions.length === 0) {
+        this.showDuplicateModal.set(false);
+        return;
+    }
+
+    if (!confirm(`Permanently remove ${resolutions.length} redundant entries?`)) return;
+
+    this.placementService.resolveDuplicates(resolutions).subscribe({
+        next: (res) => {
+            if (res.success) {
+                alert(`✅ Resolved! Removed ${res.count} items.`);
+                this.showDuplicateModal.set(false);
+                this.loadData();
+            }
+        },
+        error: () => alert('❌ Failed to resolve conflicts')
     });
   }
 
