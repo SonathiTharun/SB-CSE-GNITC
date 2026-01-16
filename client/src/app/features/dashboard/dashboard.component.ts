@@ -724,7 +724,16 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     
     let students = this.allStudents();
     if (filter === 'verified') {
-      students = students.filter(s => !s.hasPending);
+      // Fix: Include if ANY verified placement exists
+      students = students.filter(s => s.placements.some(p => p.status === 'verified'));
+      
+      // Also, for the preview DATA, we should probably only show verified placements?
+      // Since previewData is a list of students, and the template iterates student.placements,
+      // we need to return a modified student object with only verified placements.
+      students = students.map(s => ({
+        ...s,
+        placements: s.placements.filter(p => p.status === 'verified')
+      }));
     }
     this.previewData.set(students);
     this.previewModalVisible.set(true);
@@ -790,7 +799,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     import('xlsx').then((XLSX) => {
       let students = this.allStudents();
       if (filter === 'verified') {
-        students = students.filter(s => !s.hasPending);
+        students = students.filter(s => s.placements.some(p => p.status === 'verified'));
       }
 
       // Flatten: one row per placement for students with multiple offers
@@ -798,7 +807,12 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       let sno = 1;
       students.forEach(s => {
         if (s.placements && s.placements.length > 0) {
-          s.placements.forEach(p => {
+          // Filter placements if needed
+          const placementsToShow = filter === 'verified' 
+            ? s.placements.filter(p => p.status === 'verified')
+            : s.placements;
+
+          placementsToShow.forEach(p => {
             // ALWAYS prefer Company collection lookup (has Cloudinary URLs)
             const logoBase = this.getCompanyLogo(p.company) || 
               (p.logo && p.logo.includes('cloudinary.com') ? p.logo : null);
@@ -855,7 +869,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     const stats = this.stats();
     let students = this.allStudents();
     if (filter === 'verified') {
-      students = students.filter(s => !s.hasPending);
+      // Logic fix: Include student if they have ANY verified placement
+      students = students.filter(s => s.placements.some(p => p.status === 'verified'));
     }
     const date = new Date().toLocaleDateString('en-IN', {
       day: '2-digit',
@@ -878,8 +893,13 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         : `<b style="font-size:16px;color:#6366f1;">${s.name?.charAt(0) || 'S'}</b>`;
       
       if (s.placements && s.placements.length > 0) {
+        // Filter placements if needed
+        const placementsToShow = filter === 'verified' 
+          ? s.placements.filter(p => p.status === 'verified')
+          : s.placements;
+
         // One row per placement
-        s.placements.forEach(p => {
+        placementsToShow.forEach(p => {
           // ALWAYS prefer Company collection lookup (has Cloudinary URLs)
           // Only use stored logo if it's a valid Cloudinary URL
           let logoUrl = this.getCompanyLogo(p.company) || 
