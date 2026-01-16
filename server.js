@@ -969,21 +969,47 @@ app.post('/api/admin/verify', requireAdmin, async (req, res) => {
 // Send reminder emails to all pending verification students
 app.post('/api/admin/send-pending-reminders', requireAdmin, async (req, res) => {
     try {
-        // Find all pending placements (both original and student-submitted)
-        const pendingPlacements = await Placement.find({ 
-            verificationStatus: 'pending'
-        });
+        // Find pending from BOTH collections
+        const pendingStudents = await Student.find({ verificationStatus: 'pending' });
+        const pendingPlacements = await Placement.find({ verificationStatus: 'pending' });
         
-        if (pendingPlacements.length === 0) {
-            return res.json({ success: true, count: 0, message: 'No pending placements found' });
+        // Combine and deduplicate by studentId
+        const studentMap = new Map();
+        
+        // Add students with pending status
+        for (const s of pendingStudents) {
+            studentMap.set(s.id, { 
+                studentId: s.id, 
+                name: s.name, 
+                company: s.company 
+            });
+        }
+        
+        // Add placements with pending status (may overlap)
+        for (const p of pendingPlacements) {
+            if (!studentMap.has(p.studentId)) {
+                const student = await Student.findOne({ id: p.studentId });
+                if (student) {
+                    studentMap.set(p.studentId, { 
+                        studentId: p.studentId, 
+                        name: student.name, 
+                        company: p.company 
+                    });
+                }
+            }
+        }
+        
+        const pendingList = Array.from(studentMap.values());
+        console.log(`[REMINDERS] Found ${pendingStudents.length} pending students + ${pendingPlacements.length} pending placements = ${pendingList.length} unique students`);
+        
+        if (pendingList.length === 0) {
+            return res.json({ success: true, count: 0, message: 'No pending records found' });
         }
         
         let sentCount = 0;
         const errors = [];
         
-        for (const p of pendingPlacements) {
-            const student = await Student.findOne({ id: p.studentId });
-            if (!student) continue;
+        for (const p of pendingList) {
             
             const emailHtml = `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
@@ -993,14 +1019,13 @@ app.post('/api/admin/send-pending-reminders', requireAdmin, async (req, res) => 
                 </div>
                 <div style="padding: 30px; background: white;">
                     <h2 style="color: #1e293b; margin-top: 0;">Action Required: Update Your Details</h2>
-                    <p style="color: #475569; line-height: 1.6;">Dear ${student.name},</p>
+                    <p style="color: #475569; line-height: 1.6;">Dear ${p.name},</p>
                     <p style="color: #475569; line-height: 1.6;">Your placement record for <strong>${p.company}</strong> is still <span style="color: #f59e0b; font-weight: bold;">PENDING VERIFICATION</span>.</p>
                     
                     <div style="background: #fffbeb; border: 1px solid #fcd34d; border-radius: 8px; padding: 20px; margin: 20px 0;">
                         <h3 style="margin-top:0; color: #92400e;">📋 YOUR SUBMISSION</h3>
-                        <p style="margin: 5px 0;"><strong>👤 Name:</strong> ${student.name}</p>
+                        <p style="margin: 5px 0;"><strong>👤 Name:</strong> ${p.name}</p>
                         <p style="margin: 5px 0;"><strong>🏢 Company:</strong> ${p.company}</p>
-                        <p style="margin: 5px 0;"><strong>💰 Package:</strong> ${p.salary} LPA</p>
                         <p style="margin: 5px 0; color: #f59e0b; font-weight: bold;">⏳ Status: PENDING</p>
                     </div>
                     
@@ -1022,14 +1047,14 @@ app.post('/api/admin/send-pending-reminders', requireAdmin, async (req, res) => 
                 </div>
             </div>`;
             
-            const emailTo = `${student.id.toLowerCase()}@gniindia.org`;
+            const emailTo = `${p.studentId.toLowerCase()}@gniindia.org`;
             
             try {
                 await sendEmail(emailTo, '⏳ Reminder: Your Placement is Pending Verification', emailHtml);
                 sentCount++;
                 console.log(`✅ Reminder sent to ${emailTo}`);
             } catch (e) {
-                errors.push({ student: student.id, error: e.message });
+                errors.push({ student: p.studentId, error: e.message });
                 console.error(`❌ Failed to send to ${emailTo}: ${e.message}`);
             }
         }
