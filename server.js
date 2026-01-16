@@ -788,8 +788,8 @@ app.post('/api/students/create', requireAdmin, async (req, res) => {
     const emailHtml = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
         <div style="background: #4f46e5; padding: 20px; text-align: center; color: white;">
-            <h1 style="margin:0">EXCLUSIVE ACCESS</h1>
-            <p style="margin:5px 0 0; opacity: 0.9">GNITC SPECIAL BATCH</p>
+            <h1 style="margin:0">GNITC SPECIAL BATCH PLACEMENT</h1>
+            <p style="margin:10px 0 0;"><a href="https://gnitc-sb-placements.vercel.app/login" style="color: #fbbf24; text-decoration: underline;">https://gnitc-sb-placements.vercel.app</a></p>
         </div>
         <div style="padding: 30px; background: white;">
             <h2 style="color: #1e293b; margin-top: 0;">Welcome to the Elite League! 🌟</h2>
@@ -804,7 +804,7 @@ app.post('/api/students/create', requireAdmin, async (req, res) => {
             
             <p style="color: #15803d; font-weight: bold;">👉 ACTION REQUIRED:</p>
             <ol style="color: #475569; line-height: 1.6;">
-                <li>Login to the portal</li>
+                <li><a href="https://gnitc-sb-placements.vercel.app/login" style="color: #4f46e5;">Login to the portal</a></li>
                 <li>Review your placement details</li>
                 <li>Ensure your official photo is updated</li>
             </ol>
