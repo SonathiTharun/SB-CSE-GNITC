@@ -107,31 +107,63 @@ app.use(session({
   }
 }));
 
-// Email Config - Using Gmail with Port 465 (SSL) to bypass Render blocks
-const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true, // Use SSL
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    }
+// Email Config - Using Gmail API with OAuth2 (Works on Render)
+const { google } = require('googleapis');
+const OAuth2 = google.auth.OAuth2;
+
+const oauth2Client = new OAuth2(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    "https://developers.google.com/oauthplayground" // Redirect URL
+);
+
+oauth2Client.setCredentials({
+    refresh_token: process.env.GOOGLE_REFRESH_TOKEN
 });
 
-// Helper: Send Email
+const gmail = google.gmail({ version: 'v1', auth: oauth2Client });
+
+// Helper: Create Raw Email
+function makeBody(to, from, subject, message) {
+    const str = [
+        "To: " + to,
+        "From: " + from, 
+        "Subject: " + subject,
+        "MIME-Version: 1.0",
+        "Content-Type: text/html; charset=utf-8",
+        "",
+        message
+    ].join("\r\n");
+
+    return Buffer.from(str)
+        .toString("base64")
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_');
+}
+
+// Helper: Send Email using Gmail API
 async function sendEmail(to, subject, html) {
     try {
-        console.log(`📨 [Attempting] Sending email to ${to}...`);
-        await transporter.sendMail({
-            from: `"GNITC Placement Portal" <${process.env.EMAIL_USER}>`,
-            to,
-            subject,
-            html
+        console.log(`📨 [Gmail API] Sending email to ${to}...`);
+        
+        // Refresh token handling is automatic with googleapis
+        const raw = makeBody(to, process.env.GMAIL_SENDER || process.env.EMAIL_USER, subject, html);
+        
+        const response = await gmail.users.messages.send({
+            userId: 'me',
+            requestBody: {
+                raw: raw
+            }
         });
-        console.log(`✅ [Success] Email sent to ${to}: ${subject}`);
+
+        console.log(`✅ [Gmail API] Email sent to ${to}: ${subject} (ID: ${response.data.id})`);
         return true;
     } catch (e) {
-        console.error(`❌ [Failed] Email error to ${to}: ${e.message}`);
+        console.error(`❌ [Gmail API] Failed to send to ${to}: ${e.message}`);
+        // Log full error if available
+        if (e.response) {
+            console.error('   API Error:', JSON.stringify(e.response.data));
+        }
         return false;
     }
 }
@@ -141,11 +173,11 @@ app.get('/api/test-email', async (req, res) => {
     try {
         console.log('🧪 Triggering test email...');
         const result = await sendEmail(
-             process.env.EMAIL_USER, // Send to self
-            'Test Email from GNITC Portal',
-            '<h1>It Works!</h1><p>Email configuration is correct.</p>'
+             'gni.hrnotify@gmail.com', // Send to self for test
+            'Test Email from GNITC Portal (Gmail API)',
+            '<h1>It Works!</h1><p>Email configuration via Gmail API is correct.</p>'
         );
-        if (result) res.send('Email Sent Successfully! Check logs.');
+        if (result) res.send('Email Sent Successfully via Gmail API! Check logs.');
         else res.status(500).send('Email Failed. Check server logs.');
     } catch (e) {
         res.status(500).send(e.message);
