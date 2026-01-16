@@ -121,17 +121,36 @@ const transporter = nodemailer.createTransport({
 // Helper: Send Email
 async function sendEmail(to, subject, html) {
     try {
+        console.log(`📨 [Attempting] Sending email to ${to}...`);
         await transporter.sendMail({
             from: `"GNITC Placement Portal" <${process.env.EMAIL_USER}>`,
             to,
             subject,
             html
         });
-        console.log(`📧 Email sent to ${to}: ${subject}`);
+        console.log(`✅ [Success] Email sent to ${to}: ${subject}`);
+        return true;
     } catch (e) {
-        console.error(`❌ Email error: ${e.message}`);
+        console.error(`❌ [Failed] Email error to ${to}: ${e.message}`);
+        return false;
     }
 }
+
+// Emergency Email Test Route
+app.get('/api/test-email', async (req, res) => {
+    try {
+        console.log('🧪 Triggering test email...');
+        const result = await sendEmail(
+             process.env.EMAIL_USER, // Send to self
+            'Test Email from GNITC Portal',
+            '<h1>It Works!</h1><p>Email configuration is correct.</p>'
+        );
+        if (result) res.send('Email Sent Successfully! Check logs.');
+        else res.status(500).send('Email Failed. Check server logs.');
+    } catch (e) {
+        res.status(500).send(e.message);
+    }
+});
 
 // Notification Schema
 const notificationSchema = new mongoose.Schema({
@@ -233,6 +252,9 @@ async function syncCompanies() {
         // 1. Cleanup Broken Links in DB
         const dbCompanies = await Company.find({ logo: { $ne: '' } });
         for (const company of dbCompanies) {
+            // SKIP verification if it's a remote URL (Cloudinary)
+            if (company.logo && company.logo.startsWith('http')) continue;
+
             const logoPath = path.join(logoDir, company.logo);
             if (!fs.existsSync(logoPath)) {
                 console.log(`⚠️ Logo missing for ${company.name}: ${company.logo}. Cleaning up...`);
@@ -1052,7 +1074,6 @@ async function fetchImageToBase64(imagePathOrUrl) {
     }
   } else {
     // Local fallback (for old images if any or logos folder)
-    // Attempt relative to __dirname first, then try logos/
     let localPath = path.join(__dirname, imagePathOrUrl);
     
     // Check if it's in logos folder explicitly locally
@@ -1063,7 +1084,7 @@ async function fetchImageToBase64(imagePathOrUrl) {
     if (fs.existsSync(localPath)) {
       return fs.readFileSync(localPath).toString('base64');
     }
-    return 'image/png';
+    return ''; // Return empty if not found, NOT 'image/png'
   }
   return '';
 }
@@ -1108,8 +1129,9 @@ app.get('/download/word', requireAdmin, async (req, res) => {
       }
       
       // Get logo - first try student's logo, then look up from company
+      // Get logo - first try DB logo (url), then fallback to lookup
       let logoUrl = s.logo;
-      if (!logoUrl || (!logoUrl.startsWith('http') && !logoUrl)) {
+      if (!logoUrl || (logoUrl && !logoUrl.startsWith('http'))) {
         // Look up from company collection
         const companyName = normalizeCompanyName(s.company);
         if (companyName && companyLogoMap[companyName]) {
@@ -1118,9 +1140,28 @@ app.get('/download/word', requireAdmin, async (req, res) => {
       }
       
       if (logoUrl) {
+        // FORCE JPEG (Max Compatibility for Word)
+        // Remove any existing transformations first to be safe (optional, but cleaner)
+        if (logoUrl.includes('cloudinary.com')) {
+             if (!logoUrl.includes('f_jpg')) {
+                // If it already has f_png, replace it, otherwise insert
+                if (logoUrl.includes('/f_png/')) {
+                    logoUrl = logoUrl.replace('/f_png/', '/f_jpg/');
+                } else if (logoUrl.includes('/upload/')) {
+                    logoUrl = logoUrl.replace('/upload/', '/upload/f_jpg/');
+                }
+             }
+        }
+        
+        console.log(`[Report] Fetching logo for ${s.company}: ${logoUrl}`);
         const logoB64 = await fetchImageToBase64(logoUrl);
-        if (logoB64) {
+        
+        if (logoB64 && logoB64.length > 100) { 
+          // Use image/jpeg
           logoImg = `<img src="data:image/jpeg;base64,${logoB64}" width="40" height="25">`;
+          console.log(`   ✅ Success (${logoB64.length} chars)`);
+        } else {
+          console.log(`   ❌ Failed to fetch/convert`);
         }
       }
 
