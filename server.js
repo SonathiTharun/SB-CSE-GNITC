@@ -1247,7 +1247,7 @@ app.get('/api/logos', requireLogin, async (req, res) => {
 
 // 1. Scan for duplicates
 app.get('/api/admin/duplicates', async (req, res) => {
-  if (!req.session.admin) return res.status(401).json({ error: 'Unauthorized' });
+  if (!req.session.user || req.session.user.role !== 'admin') return res.status(401).json({ error: 'Unauthorized' });
 
   try {
     const students = await Student.find({}, '_id id name company verificationStatus logo salary updatedAt type');
@@ -1308,7 +1308,7 @@ app.get('/api/admin/duplicates', async (req, res) => {
 
 // 2. Resolve duplicates
 app.post('/api/admin/duplicates/resolve', async (req, res) => {
-    if (!req.session.admin) return res.status(401).json({ error: 'Unauthorized' });
+    if (!req.session.user || req.session.user.role !== 'admin') return res.status(401).json({ error: 'Unauthorized' });
 
     const { resolutions } = req.body; // Array of IDs to delete
     if (!resolutions || !Array.isArray(resolutions)) return res.status(400).json({ error: 'Invalid data' });
