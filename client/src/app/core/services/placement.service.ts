@@ -222,6 +222,13 @@ export class PlacementService {
   }
 
   /**
+   * Update a student's own placement (pending/rejected only)
+   */
+  updatePlacement(id: string, data: { company: string; salary: number; logo?: string }): Observable<any> {
+    return this.http.put(`${this.API_URL}/placements/${id}`, data);
+  }
+
+  /**
    * Upload student profile photo
    */
   uploadPhoto(file: File): Observable<{ success: boolean; photo: string }> {

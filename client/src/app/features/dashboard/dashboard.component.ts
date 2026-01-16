@@ -53,6 +53,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   sortBy = signal('sno');
   sendingReminders = signal(false);
   showReminderModal = signal(false);
+  reminderTarget: 'pending' | 'all' = 'pending';
 
   // Real data from service
   get isLoading() {
@@ -613,14 +614,40 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  // Get pending students with their email addresses
+  // Get pending students with their email addresses and pending companies
   get pendingStudentsWithEmail() {
-    return this.pendingStudents.map(s => ({
+    // Group by studentId to collect all pending companies
+    const studentMap = new Map<string, any>();
+    this.pendingStudents.forEach(s => {
+      const key = s.studentId.toUpperCase();
+      if (!studentMap.has(key)) {
+        studentMap.set(key, {
+          name: s.name,
+          studentId: s.studentId,
+          email: `${s.studentId.toLowerCase()}@gniindia.org`,
+          pendingCompanies: []
+        });
+      }
+      if (s.company) {
+        studentMap.get(key).pendingCompanies.push(s.company);
+      }
+    });
+    return Array.from(studentMap.values());
+  }
+
+  // Get all active students with their email addresses
+  get allStudentsWithEmail() {
+    return this.allStudents().map(s => ({
       name: s.name,
       studentId: s.studentId,
-      company: s.company,
-      email: `${s.studentId.toLowerCase()}@gniindia.org`
+      email: `${s.studentId.toLowerCase()}@gniindia.org`,
+      pendingCompanies: s.companies
     }));
+  }
+
+  // Get the reminder list based on target selection
+  get reminderStudentList() {
+    return this.reminderTarget === 'all' ? this.allStudentsWithEmail : this.pendingStudentsWithEmail;
   }
 
   // Open the reminder modal
@@ -637,7 +664,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.showReminderModal.set(false);
   }
 
-  // Send reminder emails to all pending students (called from modal)
+  // Send reminder emails to students (pending or all based on selection)
   async sendPendingReminders(): Promise<void> {
     if (this.sendingReminders()) return;
     
@@ -646,14 +673,18 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     try {
       const response = await fetch('https://sb-cse-gnitc-api.onrender.com/api/admin/send-pending-reminders', {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ target: this.reminderTarget }),
         credentials: 'include'
       });
       const result = await response.json();
       
       this.showReminderModal.set(false);
+      this.reminderTarget = 'pending'; // Reset to default
       
       if (result.success) {
-        alert(`✅ Sent ${result.count} reminder emails successfully!`);
+        const targetLabel = result.target === 'all' ? 'all students' : 'pending students';
+        alert(`✅ Sent ${result.count} reminder emails to ${targetLabel}!`);
       } else {
         alert('❌ Failed to send reminders: ' + (result.error || 'Unknown error'));
       }

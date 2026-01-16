@@ -639,6 +639,15 @@ app.post('/api/placements', requireStudent, async (req, res) => {
       return res.status(400).json({ error: 'Please upload your photo first' });
     }
     
+    // Check for duplicate company placement
+    const existingPlacement = await Placement.findOne({ 
+        studentId: { $regex: new RegExp(`^${req.session.user.id}$`, 'i') },
+        company: { $regex: new RegExp(`^${company}$`, 'i') }
+    });
+    if (existingPlacement) {
+        return res.status(400).json({ error: 'You already have a placement at this company' });
+    }
+    
     // Create initial placement
     const newPlacement = await Placement.create({
         studentId: req.session.user.id,
@@ -687,6 +696,55 @@ app.delete('/api/placements/:id', requireStudent, async (req, res) => {
       isOriginal: false
     });
     res.json({ success: result.deletedCount > 0 });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Edit placement (only own, non-original, pending/rejected)
+app.put('/api/placements/:id', requireStudent, async (req, res) => {
+  try {
+    const { company, salary, logo } = req.body;
+    const placement = await Placement.findOne({
+      _id: req.params.id,
+      studentId: { $regex: new RegExp(`^${req.session.user.id}$`, 'i') },
+      isOriginal: false
+    });
+    
+    if (!placement) {
+      return res.status(404).json({ error: 'Placement not found' });
+    }
+    
+    // Cannot edit verified placements
+    if (placement.verificationStatus === 'verified') {
+      return res.status(400).json({ error: 'Cannot edit verified placements' });
+    }
+    
+    // Check for duplicate if company changed
+    if (company && company.toLowerCase() !== placement.company.toLowerCase()) {
+      const duplicate = await Placement.findOne({
+        studentId: { $regex: new RegExp(`^${req.session.user.id}$`, 'i') },
+        company: { $regex: new RegExp(`^${company}$`, 'i') },
+        _id: { $ne: placement._id }
+      });
+      if (duplicate) {
+        return res.status(400).json({ error: 'You already have a placement at this company' });
+      }
+    }
+    
+    // Update fields and reset to pending
+    if (company) placement.company = company;
+    if (salary) placement.salary = parseFloat(salary);
+    if (logo) placement.logo = logo;
+    placement.verificationStatus = 'pending'; // Reset to pending for re-verification
+    await placement.save();
+    
+    // Notify Admin
+    await createNotification('admin', 'Placement Updated', 
+      `${req.session.user.name} (${req.session.user.id}) updated placement at ${placement.company}`, 'info');
+    
+    await logActivity(req, 'EDIT_PLACEMENT', `Edited placement at ${placement.company}`);
+    res.json({ success: true, placement });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -966,50 +1024,64 @@ app.post('/api/admin/verify', requireAdmin, async (req, res) => {
   }
 });
 
-// Send reminder emails to all pending verification students
+// Send reminder emails to students (pending only or all)
 app.post('/api/admin/send-pending-reminders', requireAdmin, async (req, res) => {
     try {
-        // Find pending from BOTH collections
-        const pendingStudents = await Student.find({ verificationStatus: 'pending' });
-        const pendingPlacements = await Placement.find({ verificationStatus: 'pending' });
+        const { target = 'pending' } = req.body; // 'pending' or 'all'
         
-        // Combine and deduplicate by studentId
         const studentMap = new Map();
         
-        // Add students with pending status
-        for (const s of pendingStudents) {
-            studentMap.set(s.id, { 
-                studentId: s.id, 
-                name: s.name, 
-                company: s.company 
-            });
-        }
-        
-        // Add placements with pending status (may overlap)
-        for (const p of pendingPlacements) {
-            if (!studentMap.has(p.studentId)) {
-                const student = await Student.findOne({ id: p.studentId });
-                if (student) {
-                    studentMap.set(p.studentId, { 
-                        studentId: p.studentId, 
-                        name: student.name, 
-                        company: p.company 
-                    });
+        if (target === 'all') {
+            // Get ALL students with photo (active students)
+            const allStudents = await Student.find({ photo: { $ne: '' } });
+            for (const s of allStudents) {
+                studentMap.set(s.id, { 
+                    studentId: s.id, 
+                    name: s.name, 
+                    company: s.company || 'N/A'
+                });
+            }
+            console.log(`[REMINDERS] Target: ALL - Found ${allStudents.length} active students`);
+        } else {
+            // Get only pending (original logic)
+            const pendingStudents = await Student.find({ verificationStatus: 'pending' });
+            const pendingPlacements = await Placement.find({ verificationStatus: 'pending' });
+            
+            // Add students with pending status
+            for (const s of pendingStudents) {
+                studentMap.set(s.id, { 
+                    studentId: s.id, 
+                    name: s.name, 
+                    company: s.company 
+                });
+            }
+            
+            // Add placements with pending status (may overlap)
+            for (const p of pendingPlacements) {
+                if (!studentMap.has(p.studentId)) {
+                    const student = await Student.findOne({ id: p.studentId });
+                    if (student) {
+                        studentMap.set(p.studentId, { 
+                            studentId: p.studentId, 
+                            name: student.name, 
+                            company: p.company 
+                        });
+                    }
                 }
             }
+            console.log(`[REMINDERS] Target: PENDING - Found ${pendingStudents.length} pending students + ${pendingPlacements.length} pending placements = ${studentMap.size} unique`);
         }
         
-        const pendingList = Array.from(studentMap.values());
-        console.log(`[REMINDERS] Found ${pendingStudents.length} pending students + ${pendingPlacements.length} pending placements = ${pendingList.length} unique students`);
+        const targetList = Array.from(studentMap.values());
         
-        if (pendingList.length === 0) {
-            return res.json({ success: true, count: 0, message: 'No pending records found' });
+        if (targetList.length === 0) {
+            return res.json({ success: true, count: 0, message: target === 'all' ? 'No active students found' : 'No pending records found' });
         }
         
         let sentCount = 0;
         const errors = [];
         
-        for (const p of pendingList) {
+        for (const p of targetList) {
             
             const emailHtml = `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
@@ -1027,6 +1099,12 @@ app.post('/api/admin/send-pending-reminders', requireAdmin, async (req, res) => 
                         <p style="margin: 5px 0;"><strong>👤 Name:</strong> ${p.name}</p>
                         <p style="margin: 5px 0;"><strong>🏢 Company:</strong> ${p.company}</p>
                         <p style="margin: 5px 0; color: #f59e0b; font-weight: bold;">⏳ Status: PENDING</p>
+                    </div>
+                    
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin: 20px 0;">
+                        <h3 style="margin-top:0; color: #334155;">🔑 YOUR CREDENTIALS</h3>
+                        <p style="margin: 5px 0;"><strong>📧 User ID:</strong> ${p.studentId}</p>
+                        <p style="margin: 5px 0;"><strong>🔐 Password:</strong> Welcome@123</p>
                     </div>
                     
                     <p style="color: #15803d; font-weight: bold;">👉 PLEASE ENSURE:</p>
@@ -1059,11 +1137,12 @@ app.post('/api/admin/send-pending-reminders', requireAdmin, async (req, res) => 
             }
         }
         
-        await logActivity(req, 'SEND_REMINDERS', `Sent ${sentCount} pending verification reminders`);
+        await logActivity(req, 'SEND_REMINDERS', `Sent ${sentCount} ${target === 'all' ? 'general' : 'pending verification'} reminders`);
         res.json({ 
             success: true, 
             count: sentCount, 
-            total: pendingPlacements.length,
+            total: targetList.length,
+            target: target,
             errors: errors.length > 0 ? errors : undefined
         });
     } catch (error) {

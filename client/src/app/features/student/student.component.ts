@@ -41,6 +41,11 @@ export class StudentComponent implements OnInit {
   showNotifications = signal(false);
   showLogoutModal = signal(false);
   
+  // Edit Placement Modal
+  showEditModal = signal(false);
+  editingPlacement = signal<Student | null>(null);
+  editForm = { company: '', salary: null as number | null, logo: '' };
+  
   // Notification Sound System
   private audioContext: AudioContext | null = null;
   private lastNotificationCount = 0;
@@ -198,6 +203,15 @@ export class StudentComponent implements OnInit {
       return;
     }
 
+    // Check for duplicate company
+    const isDuplicate = this.myPlacements().some(
+      p => p.company.toLowerCase() === this.placementForm.company.toLowerCase()
+    );
+    if (isDuplicate) {
+      this.showMessage('error', 'You already have a placement at this company');
+      return;
+    }
+
     this.isSubmitting.set(true);
     
     // Look up the company's logo from the companies list
@@ -223,7 +237,7 @@ export class StudentComponent implements OnInit {
   }
 
   deletePlacement(id: string): void {
-    if (!confirm('Are you sure you want to delete this implementation?')) return;
+    if (!confirm('Are you sure you want to delete this placement?')) return;
 
     this.placementService.deleteMyPlacement(id).subscribe({
       next: () => {
@@ -232,6 +246,56 @@ export class StudentComponent implements OnInit {
       },
       error: (err) => {
         this.showMessage('error', 'Failed to delete placement');
+      }
+    });
+  }
+
+  // Edit Placement Methods
+  openEditModal(placement: Student): void {
+    this.editingPlacement.set(placement);
+    this.editForm = { 
+      company: placement.company, 
+      salary: placement.salary,
+      logo: placement.logo || ''
+    };
+    this.showEditModal.set(true);
+  }
+
+  submitEdit(): void {
+    const p = this.editingPlacement();
+    if (!p || !this.editForm.company || !this.editForm.salary) {
+      this.showMessage('error', 'Please fill all fields');
+      return;
+    }
+    
+    // Client-side duplicate check (excluding current placement)
+    const isDuplicate = this.myPlacements().some(
+      pl => pl._id !== p._id && 
+      pl.company.toLowerCase() === this.editForm.company.toLowerCase()
+    );
+    if (isDuplicate) {
+      this.showMessage('error', 'You already have a placement at this company');
+      return;
+    }
+    
+    this.isSubmitting.set(true);
+    const selectedCompany = this.companies().find(c => c.name === this.editForm.company);
+    
+    this.placementService.updatePlacement(p._id, {
+      company: this.editForm.company,
+      salary: this.editForm.salary!,
+      logo: selectedCompany?.logo || this.editForm.logo
+    }).subscribe({
+      next: () => {
+        this.showMessage('success', 'Placement updated! Sent for re-verification.');
+        this.showEditModal.set(false);
+        this.editingPlacement.set(null);
+        this.loadProfile();
+        this.isSubmitting.set(false);
+      },
+      error: (err) => {
+        this.showMessage('error', err.error?.error || 'Failed to update placement');
+        this.isSubmitting.set(false);
       }
     });
   }
