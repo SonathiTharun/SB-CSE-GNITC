@@ -347,7 +347,7 @@ const placementSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
   updatedAt: Date,
   isOriginal: { type: Boolean, default: false }, // true for original imported data
-  verificationStatus: { type: String, default: 'verified', enum: ['verified', 'pending', 'rejected'] }
+  verificationStatus: { type: String, default: 'pending', enum: ['verified', 'pending', 'rejected'] }
 });
 const Placement = mongoose.model('Placement', placementSchema);
 
@@ -385,7 +385,7 @@ const studentSchema = new mongoose.Schema({
   updatedAt: Date,
   password: { type: String, default: 'Welcome@123' },
   passwordChanged: { type: Boolean, default: false },
-  verificationStatus: { type: String, default: 'verified', enum: ['verified', 'pending', 'rejected'] }
+  verificationStatus: { type: String, default: 'pending', enum: ['verified', 'pending', 'rejected'] }
 });
 const Student = mongoose.model('Student', studentSchema);
 
@@ -834,6 +834,7 @@ app.post('/api/students/create', requireAdmin, async (req, res) => {
       logo: '',
       company: '',
       salary: 0,
+      verificationStatus: 'pending', // Explicitly pending
       password: hashedPassword
     });
     
@@ -1255,13 +1256,75 @@ app.get('/download/excel', requireAdmin, async (req, res) => {
     if (filter === 'verified') placementQuery.verificationStatus = 'verified';
     const newPlacements = await Placement.find(placementQuery);
     
-    const allData = [
-      ...students.map((s, i) => ({ 'S.No': i + 1, 'Student ID': s.id, 'Name': s.name, 'Photo': s.photo, 'Company': s.company, 'Package (LPA)': s.salary, 'Type': 'Original' })),
-      ...newPlacements.map((p, i) => ({ 'S.No': students.length + i + 1, 'Student ID': p.studentId, 'Name': p.name, 'Photo': p.photo, 'Company': p.company, 'Package (LPA)': p.salary, 'Type': 'New' }))
+    // Deduplication Logic for Report:
+    // If a student has multiple placements for the same company (e.g. one rejected, one verified),
+    // prioritize the VERIFIED one.
+    
+    // Combine data pool
+    const rawData = [
+      ...students.map((s, i) => ({ 
+          sno: i + 1, 
+          studentId: s.id, 
+          name: s.name, 
+          photo: s.photo, 
+          company: s.company, 
+          salary: s.salary, 
+          type: 'Original', 
+          status: s.verificationStatus 
+      })),
+      ...newPlacements.map((p, i) => ({ 
+          sno: students.length + i + 1, 
+          studentId: p.studentId, 
+          name: p.name, 
+          photo: p.photo, 
+          company: p.company, 
+          salary: p.salary, 
+          type: 'New', 
+          status: p.verificationStatus 
+      }))
     ];
+
+    // Filter Logic:
+    // 1. If filter='verified', we only want verified.
+    // 2. If filter='all', we still want to avoid showing REJECTED duplicates if a VERIFIED exists.
+    
+    const uniqueMap = new Map();
+    
+    rawData.forEach(item => {
+        const key = `${item.studentId}-${item.company}`.toLowerCase();
+        
+        if (!uniqueMap.has(key)) {
+            uniqueMap.set(key, item);
+        } else {
+            const existing = uniqueMap.get(key);
+            // If existing is not verified but current IS verified, swap it
+            if (existing.status !== 'verified' && item.status === 'verified') {
+                 uniqueMap.set(key, item);
+            }
+            // If both are same status, keep existing (usually earlier or later determined by sort)
+        }
+    });
+    
+    // Convert back to array
+    let processedData = Array.from(uniqueMap.values());
+    
+    // If STRICTLY asking for verified only
+    if (filter === 'verified') {
+        processedData = processedData.filter(d => d.status === 'verified');
+    }
+
+    const exportData = processedData.map((d, i) => ({
+        'S.No': i + 1, // Re-index after filtering
+        'Student ID': d.studentId,
+        'Name': d.name,
+        'Photo': d.photo,
+        'Company': d.company,
+        'Package (LPA)': d.salary,
+        'Type': d.type
+    }));
     
     const wb = XLSX.utils.book_new();
-    const ws = XLSX.utils.json_to_sheet(allData);
+    const ws = XLSX.utils.json_to_sheet(exportData);
     XLSX.utils.book_append_sheet(wb, ws, 'Placements');
     const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
     
@@ -1326,7 +1389,38 @@ app.get('/download/word', requireAdmin, async (req, res) => {
     if (filter === 'verified') placementQuery.verificationStatus = 'verified';
     const newPlacements = await Placement.find(placementQuery);
     
-    const allPlacements = [...students, ...newPlacements];
+    // Combine data pool for processing
+    const rawData = [...students, ...newPlacements];
+
+    // 1. Deduplication (Same logic as Excel)
+    const uniqueMap = new Map();
+    rawData.forEach(item => {
+        // Handle varying ID fields
+        const sId = item.studentId || item.id;
+        const key = `${sId}-${item.company}`.toLowerCase();
+        
+        // Standardize status
+        const status = item.verificationStatus || 'verified'; // Default to verified if missing (legacy)
+
+        if (!uniqueMap.has(key)) {
+            uniqueMap.set(key, { ...item.toObject(), verificationStatus: status });
+        } else {
+            const existing = uniqueMap.get(key);
+            if (existing.verificationStatus !== 'verified' && status === 'verified') {
+                 uniqueMap.set(key, { ...item.toObject(), verificationStatus: status });
+            }
+        }
+    });
+
+    let allPlacements = Array.from(uniqueMap.values());
+
+    // 2. Strict Filter
+    if (filter === 'verified') {
+        allPlacements = allPlacements.filter(p => p.verificationStatus === 'verified');
+    }
+    
+    // Sort by name for nicer report
+    allPlacements.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
     
     // Pre-fetch all companies for logo lookup
     const companies = await Company.find({});
