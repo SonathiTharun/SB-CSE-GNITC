@@ -647,9 +647,9 @@
                             {{ p.status.charAt(0) }}
                           </span>
 
-                          <!-- Verify Actions (Mini) -->
+                          <!-- Verify Actions (Mini) - Only show for non-original pending entries -->
                           <div
-                            *ngIf="p.status === 'pending'"
+                            *ngIf="p.status === 'pending' && !p.isOriginal"
                             class="flex gap-1"
                           >
                             <button
