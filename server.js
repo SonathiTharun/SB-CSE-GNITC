@@ -909,7 +909,71 @@ app.put('/api/students/:id', requireAdmin, async (req, res) => {
     }
 });
 
-// Delete Student (Admin)
+// ==================== VERIFY PLACEMENT/ORIGINAL ENTRY (Admin) ====================
+app.post('/api/admin/verify', requireAdmin, async (req, res) => {
+    try {
+        const { type, id, action } = req.body;
+        
+        if (!id || !action || !['approve', 'reject'].includes(action)) {
+            return res.status(400).json({ error: 'Invalid request data' });
+        }
+        
+        const newStatus = action === 'approve' ? 'verified' : 'rejected';
+        
+        if (type === 'placement') {
+            // Handle placement from Placement collection
+            const placement = await Placement.findByIdAndUpdate(
+                id,
+                { verificationStatus: newStatus },
+                { new: true }
+            );
+            
+            if (!placement) {
+                return res.status(404).json({ error: 'Placement not found' });
+            }
+            
+            // Notify student
+            await createNotification(
+                placement.studentId,
+                `Placement ${action === 'approve' ? 'Approved' : 'Rejected'}`,
+                `Your placement at ${placement.company} has been ${newStatus}.`,
+                action === 'approve' ? 'success' : 'error'
+            );
+            
+            await logActivity(req, 'VERIFY_PLACEMENT', `${action}d placement ${id} for ${placement.studentId}`);
+            
+        } else if (type === 'original') {
+            // Handle original student entry from Student collection
+            const student = await Student.findByIdAndUpdate(
+                id,
+                { verificationStatus: newStatus },
+                { new: true }
+            );
+            
+            if (!student) {
+                return res.status(404).json({ error: 'Student not found' });
+            }
+            
+            // Notify student
+            await createNotification(
+                student.id,
+                `Profile ${action === 'approve' ? 'Approved' : 'Rejected'}`,
+                `Your placement record has been ${newStatus}.`,
+                action === 'approve' ? 'success' : 'error'
+            );
+            
+            await logActivity(req, 'VERIFY_STUDENT', `${action}d student ${student.id}`);
+        } else {
+            return res.status(400).json({ error: 'Invalid type' });
+        }
+        
+        res.json({ success: true, status: newStatus });
+        
+    } catch (error) {
+        console.error('Verify error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
 app.delete('/api/students/:id', requireAdmin, async (req, res) => {
     try {
         const { id } = req.params;
