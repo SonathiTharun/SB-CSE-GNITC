@@ -664,7 +664,7 @@ app.post('/api/placements', requireStudent, async (req, res) => {
                 <li><strong>Company:</strong> ${company}</li>
                 <li><strong>Package:</strong> ${salary} LPA</li>
             </ul>
-            <p><a href="http://localhost:3000/login">Login to Verify</a></p>
+            <p><a href="https://gnitc-sb-placements.vercel.app/login" style="color: #4f46e5; font-weight: bold;">Login to Verify</a></p>
         </div>
     `;
     // Fire-and-forget: don't block API response waiting for email
@@ -964,6 +964,88 @@ app.post('/api/admin/verify', requireAdmin, async (req, res) => {
     console.error('[VERIFY] Error:', error);
     res.status(500).json({ error: error.message });
   }
+});
+
+// Send reminder emails to all pending verification students
+app.post('/api/admin/send-pending-reminders', requireAdmin, async (req, res) => {
+    try {
+        // Find all pending placements
+        const pendingPlacements = await Placement.find({ 
+            verificationStatus: 'pending',
+            isOriginal: false 
+        });
+        
+        if (pendingPlacements.length === 0) {
+            return res.json({ success: true, count: 0, message: 'No pending placements found' });
+        }
+        
+        let sentCount = 0;
+        const errors = [];
+        
+        for (const p of pendingPlacements) {
+            const student = await Student.findOne({ id: p.studentId });
+            if (!student) continue;
+            
+            const emailHtml = `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
+                <div style="background: #f59e0b; padding: 20px; text-align: center; color: white;">
+                    <h1 style="margin:0">⏳ VERIFICATION PENDING</h1>
+                    <p style="margin:10px 0 0;"><a href="https://gnitc-sb-placements.vercel.app/login" style="color: white; text-decoration: underline;">GNITC Special Batch Placement Portal</a></p>
+                </div>
+                <div style="padding: 30px; background: white;">
+                    <h2 style="color: #1e293b; margin-top: 0;">Action Required: Update Your Details</h2>
+                    <p style="color: #475569; line-height: 1.6;">Dear ${student.name},</p>
+                    <p style="color: #475569; line-height: 1.6;">Your placement record for <strong>${p.company}</strong> is still <span style="color: #f59e0b; font-weight: bold;">PENDING VERIFICATION</span>.</p>
+                    
+                    <div style="background: #fffbeb; border: 1px solid #fcd34d; border-radius: 8px; padding: 20px; margin: 20px 0;">
+                        <h3 style="margin-top:0; color: #92400e;">📋 YOUR SUBMISSION</h3>
+                        <p style="margin: 5px 0;"><strong>👤 Name:</strong> ${student.name}</p>
+                        <p style="margin: 5px 0;"><strong>🏢 Company:</strong> ${p.company}</p>
+                        <p style="margin: 5px 0;"><strong>💰 Package:</strong> ${p.salary} LPA</p>
+                        <p style="margin: 5px 0; color: #f59e0b; font-weight: bold;">⏳ Status: PENDING</p>
+                    </div>
+                    
+                    <p style="color: #15803d; font-weight: bold;">👉 PLEASE ENSURE:</p>
+                    <ol style="color: #475569; line-height: 1.6;">
+                        <li>Your placement details are correct</li>
+                        <li>Your official photo is uploaded</li>
+                        <li>Company logo is visible</li>
+                    </ol>
+                    
+                    <div style="text-align: center; margin: 25px 0;">
+                        <a href="https://gnitc-sb-placements.vercel.app/login" 
+                           style="background: #4f46e5; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+                           🔐 Login to Review
+                        </a>
+                    </div>
+                    
+                    <p style="color: #475569;">Best Regards,<br>GNITC Special Batch Team</p>
+                </div>
+            </div>`;
+            
+            const emailTo = `${student.id.toLowerCase()}@gniindia.org`;
+            
+            try {
+                await sendEmail(emailTo, '⏳ Reminder: Your Placement is Pending Verification', emailHtml);
+                sentCount++;
+                console.log(`✅ Reminder sent to ${emailTo}`);
+            } catch (e) {
+                errors.push({ student: student.id, error: e.message });
+                console.error(`❌ Failed to send to ${emailTo}: ${e.message}`);
+            }
+        }
+        
+        await logActivity(req, 'SEND_REMINDERS', `Sent ${sentCount} pending verification reminders`);
+        res.json({ 
+            success: true, 
+            count: sentCount, 
+            total: pendingPlacements.length,
+            errors: errors.length > 0 ? errors : undefined
+        });
+    } catch (error) {
+        console.error('Send reminders error:', error);
+        res.status(500).json({ error: error.message });
+    }
 });
 
 // NEW: Get All Students (Admin)

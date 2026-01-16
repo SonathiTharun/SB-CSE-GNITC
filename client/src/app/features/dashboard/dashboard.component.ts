@@ -51,6 +51,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   searchQuery = signal('');
   statusFilter = signal('all');
   sortBy = signal('sno');
+  sendingReminders = signal(false);
 
   // Real data from service
   get isLoading() {
@@ -610,6 +611,41 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         error: (err) => console.error('Reject failed:', err),
       });
   }
+
+  // Send reminder emails to all pending students
+  async sendPendingReminders(): Promise<void> {
+    if (this.sendingReminders()) return;
+    
+    const pending = this.pendingStudents.length;
+    if (pending === 0) {
+      alert('No pending verifications to remind!');
+      return;
+    }
+    
+    if (!confirm(`Send reminder emails to ${pending} pending student(s)?`)) return;
+    
+    this.sendingReminders.set(true);
+    
+    try {
+      const response = await fetch('/api/admin/send-pending-reminders', {
+        method: 'POST',
+        credentials: 'include'
+      });
+      const result = await response.json();
+      
+      if (result.success) {
+        alert(`✅ Sent ${result.count} reminder emails successfully!`);
+      } else {
+        alert('❌ Failed to send reminders: ' + (result.error || 'Unknown error'));
+      }
+    } catch (e) {
+      alert('❌ Error sending reminders');
+      console.error(e);
+    } finally {
+      this.sendingReminders.set(false);
+    }
+  }
+
   // Export Modal Methods
   showExportModal(type: 'excel' | 'word'): void {
     this.exportType.set(type);
