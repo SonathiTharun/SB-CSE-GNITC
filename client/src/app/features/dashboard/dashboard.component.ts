@@ -52,6 +52,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   statusFilter = signal('all');
   sortBy = signal('sno');
   sendingReminders = signal(false);
+  showReminderModal = signal(false);
 
   // Real data from service
   get isLoading() {
@@ -612,17 +613,33 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  // Send reminder emails to all pending students
-  async sendPendingReminders(): Promise<void> {
-    if (this.sendingReminders()) return;
-    
-    const pending = this.pendingStudents.length;
-    if (pending === 0) {
+  // Get pending students with their email addresses
+  get pendingStudentsWithEmail() {
+    return this.pendingStudents.map(s => ({
+      name: s.name,
+      studentId: s.studentId,
+      company: s.company,
+      email: `${s.studentId.toLowerCase()}@gniindia.org`
+    }));
+  }
+
+  // Open the reminder modal
+  openReminderModal(): void {
+    if (this.pendingStudents.length === 0) {
       alert('No pending verifications to remind!');
       return;
     }
-    
-    if (!confirm(`Send reminder emails to ${pending} pending student(s)?`)) return;
+    this.showReminderModal.set(true);
+  }
+
+  // Close the reminder modal
+  closeReminderModal(): void {
+    this.showReminderModal.set(false);
+  }
+
+  // Send reminder emails to all pending students (called from modal)
+  async sendPendingReminders(): Promise<void> {
+    if (this.sendingReminders()) return;
     
     this.sendingReminders.set(true);
     
@@ -632,6 +649,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         credentials: 'include'
       });
       const result = await response.json();
+      
+      this.showReminderModal.set(false);
       
       if (result.success) {
         alert(`✅ Sent ${result.count} reminder emails successfully!`);
