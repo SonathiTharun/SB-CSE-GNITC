@@ -123,13 +123,26 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       );
     }
 
-    if (this.statusFilter() !== 'all') {
-      if (this.statusFilter() === 'pending') {
-        result = result.filter((s) => s.hasPending);
-      } else {
+    // Check if we're in Pending view (via sidebar navigation)
+    const isPendingView = this.currentView() === 'pending';
+
+    if (this.statusFilter() !== 'all' || isPendingView) {
+      const filterStatus = isPendingView ? 'pending' : this.statusFilter();
+      
+      if (filterStatus === 'pending') {
+        // Only include students who have ACTUAL pending placements (not just hasPending flag)
+        result = result.filter((s) =>
+          s.placements.some((p) => p.status === 'pending')
+        );
+        // Also filter the placements array to only show pending placements in this view
+        result = result.map(s => ({
+          ...s,
+          placements: s.placements.filter(p => p.status === 'pending')
+        }));
+      } else if (filterStatus !== 'all') {
         // For verified/rejected, check if any placement matches
         result = result.filter((s) =>
-          s.placements.some((p) => p.status === this.statusFilter())
+          s.placements.some((p) => p.status === filterStatus)
         );
       }
     }

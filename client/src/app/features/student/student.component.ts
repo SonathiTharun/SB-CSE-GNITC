@@ -187,7 +187,9 @@ export class StudentComponent implements OnInit {
         this.isSubmitting.set(false);
       },
       error: (err) => {
-        this.showMessage('error', 'Failed to upload photo');
+        // Display specific error from backend (file size, file type, etc.)
+        const errorMsg = err?.error?.error || err?.error?.message || 'Failed to upload photo. Please try again.';
+        this.showMessage('error', errorMsg);
         this.isSubmitting.set(false);
       }
     });

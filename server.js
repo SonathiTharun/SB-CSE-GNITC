@@ -760,8 +760,30 @@ app.put('/api/placements/:id', requireStudent, async (req, res) => {
   }
 });
 
-// Upload photo
-app.post('/api/upload-photo', requireStudent, upload.single('photo'), async (req, res) => {
+// Upload photo - with Multer error handling wrapper
+app.post('/api/upload-photo', requireStudent, (req, res, next) => {
+  upload.single('photo')(req, res, (err) => {
+    if (err) {
+      // Handle Multer-specific errors with user-friendly messages
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(400).json({ 
+          error: '📷 File too large! Please upload a photo smaller than 2MB.',
+          details: 'Try compressing your image or using a smaller resolution photo.',
+          code: 'FILE_TOO_LARGE'
+        });
+      }
+      if (err.message && err.message.includes('Only JPG')) {
+        return res.status(400).json({ 
+          error: '🖼️ Invalid file type! Only JPG, JPEG, PNG, WEBP, or JFIF files are allowed.',
+          code: 'INVALID_FILE_TYPE'
+        });
+      }
+      // Generic multer error
+      return res.status(400).json({ error: err.message });
+    }
+    next();
+  });
+}, async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
