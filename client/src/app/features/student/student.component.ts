@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { gsap } from 'gsap';
 import { AuthService } from '../../core/services/auth.service';
 import { PlacementService, Student } from '../../core/services/placement.service';
+import { compressImage } from '../../core/utils/image-compressor';
 
 @Component({
   selector: 'app-student',
@@ -172,27 +173,38 @@ export class StudentComponent implements OnInit {
     }
   }
 
-  uploadPhoto(): void {
+
+  async uploadPhoto(): Promise<void> {
     if (!this.selectedFile) return;
 
     this.isSubmitting.set(true);
-    this.placementService.uploadPhoto(this.selectedFile).subscribe({
-      next: (res) => {
-        if (this.student()) {
-          this.student.update(s => s ? ({ ...s, photo: res.photo }) : null);
+    
+    try {
+      // Compress image before upload (auto-resize and compress to under 1.5MB)
+      const compressedFile = await compressImage(this.selectedFile);
+      
+      this.placementService.uploadPhoto(compressedFile).subscribe({
+        next: (res) => {
+          if (this.student()) {
+            this.student.update(s => s ? ({ ...s, photo: res.photo }) : null);
+          }
+          this.showMessage('success', 'Photo uploaded successfully!');
+          this.showUploadModal.set(false);
+          this.selectedFile = null;
+          this.isSubmitting.set(false);
+        },
+        error: (err) => {
+          // Display specific error from backend (file size, file type, etc.)
+          const errorMsg = err?.error?.error || err?.error?.message || 'Failed to upload photo. Please try again.';
+          this.showMessage('error', errorMsg);
+          this.isSubmitting.set(false);
         }
-        this.showMessage('success', 'Photo uploaded successfully!');
-        this.showUploadModal.set(false);
-        this.selectedFile = null;
-        this.isSubmitting.set(false);
-      },
-      error: (err) => {
-        // Display specific error from backend (file size, file type, etc.)
-        const errorMsg = err?.error?.error || err?.error?.message || 'Failed to upload photo. Please try again.';
-        this.showMessage('error', errorMsg);
-        this.isSubmitting.set(false);
-      }
-    });
+      });
+    } catch (compressionError) {
+      console.error('Compression error:', compressionError);
+      this.showMessage('error', 'Failed to process image. Please try a different photo.');
+      this.isSubmitting.set(false);
+    }
   }
 
   submitPlacement(): void {
@@ -292,11 +304,13 @@ export class StudentComponent implements OnInit {
     this.isSubmitting.set(true);
     const selectedCompany = this.companies().find(c => c.name === this.editForm.company);
     
-    // Upload photo first if selected
+    // Upload photo first if selected (with compression)
     const uploadAndUpdate = async () => {
       try {
         if (this.editPhotoFile) {
-          await this.placementService.uploadPhoto(this.editPhotoFile).toPromise();
+          // Compress before upload
+          const compressedFile = await compressImage(this.editPhotoFile);
+          await this.placementService.uploadPhoto(compressedFile).toPromise();
         }
         
         this.placementService.updatePlacement(p._id, {
