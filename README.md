@@ -219,6 +219,31 @@ SB-CSE-GNITC/
 
 ---
 
+## 🛠️ Utility Scripts
+
+### Apology Email Script (`send-apology-emails.js`)
+
+A one-time script to send apology + verification confirmation emails to all verified students who may have missed their notification.
+
+**Features:**
+
+- 🙏 Sends personalized apology with verification confirmation
+- 💡 Includes inspirational quote from Dr. APJ Abdul Kalam
+- 🔍 Dry-run mode to preview recipients before sending
+- 📊 Detailed summary report
+
+**Usage:**
+
+```bash
+# Preview recipients (no emails sent)
+node send-apology-emails.js --dry-run
+
+# Send emails to all verified students
+node send-apology-emails.js
+```
+
+---
+
 ## 📧 Contact & Support
 
 **Sonathi Tharun Kumar**  
