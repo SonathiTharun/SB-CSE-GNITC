@@ -932,70 +932,7 @@ app.put('/api/students/:id', requireAdmin, async (req, res) => {
 });
 
 // ==================== VERIFY PLACEMENT/ORIGINAL ENTRY (Admin) ====================
-app.post('/api/admin/verify', requireAdmin, async (req, res) => {
-    try {
-        const { type, id, action } = req.body;
-        
-        if (!id || !action || !['approve', 'reject'].includes(action)) {
-            return res.status(400).json({ error: 'Invalid request data' });
-        }
-        
-        const newStatus = action === 'approve' ? 'verified' : 'rejected';
-        
-        if (type === 'placement') {
-            // Handle placement from Placement collection
-            const placement = await Placement.findByIdAndUpdate(
-                id,
-                { verificationStatus: newStatus },
-                { new: true }
-            );
-            
-            if (!placement) {
-                return res.status(404).json({ error: 'Placement not found' });
-            }
-            
-            // Notify student
-            await createNotification(
-                placement.studentId,
-                `Placement ${action === 'approve' ? 'Approved' : 'Rejected'}`,
-                `Your placement at ${placement.company} has been ${newStatus}.`,
-                action === 'approve' ? 'success' : 'error'
-            );
-            
-            await logActivity(req, 'VERIFY_PLACEMENT', `${action}d placement ${id} for ${placement.studentId}`);
-            
-        } else if (type === 'original') {
-            // Handle original student entry from Student collection
-            const student = await Student.findByIdAndUpdate(
-                id,
-                { verificationStatus: newStatus },
-                { new: true }
-            );
-            
-            if (!student) {
-                return res.status(404).json({ error: 'Student not found' });
-            }
-            
-            // Notify student
-            await createNotification(
-                student.id,
-                `Profile ${action === 'approve' ? 'Approved' : 'Rejected'}`,
-                `Your placement record has been ${newStatus}.`,
-                action === 'approve' ? 'success' : 'error'
-            );
-            
-            await logActivity(req, 'VERIFY_STUDENT', `${action}d student ${student.id}`);
-        } else {
-            return res.status(400).json({ error: 'Invalid type' });
-        }
-        
-        res.json({ success: true, status: newStatus });
-        
-    } catch (error) {
-        console.error('Verify error:', error);
-        res.status(500).json({ error: error.message });
-    }
-});
+// NOTE: Removed duplicate route - the active implementation is below (includes email sending)
 app.delete('/api/students/:id', requireAdmin, async (req, res) => {
     try {
         const { id } = req.params;
@@ -1109,7 +1046,60 @@ app.post('/api/admin/verify', requireAdmin, async (req, res) => {
     } else if (type === 'original') {
         const s = await Student.findByIdAndUpdate(id, { verificationStatus: status });
         if (s) {
-            await createNotification(s.id, 'Profile Status Update', `Your profile verification status is now: ${status.toUpperCase()}`, 'info');
+            console.log(`[VERIFY] Original student entry found: ${s.id} (${s.name}). Preparing email...`);
+            const title = status === 'verified' ? '✅ Official Record: VERIFIED' : '⚠️ Record Needs Revision';
+            const message = status === 'verified' 
+                ? `Great news! Your placement at ${s.company} has been verified and officially recorded.`
+                : `Your placement at ${s.company} was not approved. Please check details and resubmit.`;
+            
+            // Email Content (Celebration/Revision)
+            let emailHtml = '';
+            if (status === 'verified') {
+                emailHtml = `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
+                    <div style="background: #4f46e5; padding: 20px; text-align: center; color: white;">
+                        <h1 style="margin:0">RECORDS UPDATED</h1>
+                        <p style="margin:5px 0 0; opacity: 0.9">GNITC SPECIAL BATCH</p>
+                    </div>
+                    <div style="padding: 30px; background: white;">
+                        <h2 style="color: #1e293b; margin-top: 0;">✅ Official Record Status: VERIFIED</h2>
+                        <p style="color: #475569; line-height: 1.6;">Dear ${s.name},</p>
+                        <p style="color: #475569; line-height: 1.6;">This is to confirm that your placement details have been formally REVIEWED and VERIFIED by the administration.</p>
+                        
+                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin: 20px 0;">
+                            <p style="margin: 5px 0;"><strong>👤 Student:</strong> ${s.name}</p>
+                            <p style="margin: 5px 0;"><strong>🏢 Company:</strong> ${s.company || 'N/A'}</p>
+                            <p style="margin: 5px 0;"><strong>💰 Package:</strong> ${s.salary || 0} LPA</p>
+                            <p style="margin: 5px 0; color: #15803d; font-weight: bold;">✅ STATUS: VERIFIED</p>
+                        </div>
+                        
+                        <p style="color: #475569;">Thank you for your cooperation in maintaining accurate records.</p>
+                        <p style="color: #475569;">Best Regards,<br>GNITC Special Batch Team</p>
+                    </div>
+                </div>`;
+            } else {
+                 emailHtml = `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
+                    <div style="background: #ef4444; padding: 20px; text-align: center; color: white;">
+                        <h1 style="margin:0">ACTION REQUIRED</h1>
+                        <p style="margin:5px 0 0; opacity: 0.9">GNITC SPECIAL BATCH</p>
+                    </div>
+                    <div style="padding: 30px; background: white;">
+                        <h2 style="color: #1e293b; margin-top: 0;">⚠️ Record Status: REJECTED</h2>
+                        <p style="color: #475569; line-height: 1.6;">Dear ${s.name},</p>
+                        <p style="color: #475569; line-height: 1.6;">Your placement submission for <strong>${s.company || 'N/A'}</strong> requires revision.</p>
+                        <p style="color: #475569; line-height: 1.6;">Please login to the portal, edit the details, and resubmit for verification.</p>
+                        <p style="color: #475569;">Best Regards,<br>GNITC Special Batch Team</p>
+                    </div>
+                </div>`;
+            }
+
+            await createNotification(s.id, title, message, status === 'verified' ? 'success' : 'warning');
+            const emailTo = `${s.id.toLowerCase()}@gniindia.org`;
+            console.log(`[VERIFY] Sending email to ${emailTo}`);
+            // Fire-and-forget: don't block verification response
+            sendEmail(emailTo, title, emailHtml)
+              .catch(e => console.error('Verification email failed:', e.message));
         }
     }
     
